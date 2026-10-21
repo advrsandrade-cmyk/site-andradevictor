@@ -18,7 +18,7 @@ LIMPO = "--limpo" in sys.argv
 
 NOME = "Andrade e Victor Advogados Associados"
 NOME_CURTO = "Andrade e Victor"
-SITE = "https://www.andradevictoradvogados.com.br"
+SITE = "https://andradevictoradvogados.com.br"  # o www redireciona para este endereço (GitHub Pages); canônico sem www
 INSTAGRAM = "https://www.instagram.com/andradevictoradv/"
 ENDERECO = "Rua Dr. Bertino Passos, 21 — Centro"  # conforme o cartão de visita do escritório
 EMAIL = "andradevictoradvogados@gmail.com"  # cartão de visita
@@ -58,11 +58,11 @@ SOCIOS = {
         "oab": "OAB/BA 57.064",
         "cel": "(75) 99864-9163",
         "whats": "5575998649163",
-        "areas": ["administrativo", "tributario"],
-        "foco": "Direito Administrativo e Direito Tributário",
-        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Administrativo, Direito Criminal e Direito Tributário, com atuação em tribunais superiores.",
+        "areas": ["administrativo", "civil", "tributario"],
+        "foco": "Direito Administrativo, Civil e Tributário",
+        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Administrativo, Direito Criminal e Direito Tributário, com atuação em tribunais superiores e atendimento online para todo o Brasil.",
         "bio": [
-            "Ricardo Andrade é advogado há dez anos, com atuação concentrada no Direito Tributário e no Direito Administrativo — áreas em que uniu a formação acadêmica à prática diária na gestão pública.",
+            "Ricardo Andrade é advogado há dez anos, com atuação concentrada no Direito Tributário, no Direito Administrativo e no Direito Civil — áreas em que uniu a formação acadêmica à prática diária na gestão pública e no atendimento a pessoas e empresas.",
             "Foi Procurador Municipal por oito anos, contribuindo com a gestão pública e a defesa dos interesses municipais. Essa experiência dá ao escritório conhecimento de dentro sobre licitações, contratos, servidores, tributos municipais e processos administrativos.",
             "É pós-graduado em Direito Tributário pelo Instituto Brasileiro de Direito, em Direito Administrativo pela Escola Brasileira de Direito e em Direito Criminal pela PUC Minas. Além da advocacia privada, tem vasta atuação em tribunais superiores.",
         ],
@@ -74,36 +74,50 @@ SOCIOS = {
         ],
     },
 }
+ONLINE = "Atendimento online para todo o Brasil"
+ONLINE_ITENS = [
+    "Consulta por videochamada ou WhatsApp, de qualquer cidade do Brasil",
+    "Documentos e procuração enviados e assinados digitalmente",
+    "Processos eletrônicos acompanhados em todas as instâncias",
+    "Reunião presencial no escritório, com hora marcada, quando preferir",
+]
 
 # Áreas de atuação: (slug, ícone, nome, nome curto, responsável, resumo, lista de atuação, hero lead, faq)
 AREAS = [
     ("administrativo", "predio", "Direito Administrativo", "Administrativo", "ricardo",
      "Servidores públicos, concursos, licitações, contratos e processos administrativos, com atuação em Mandado de Segurança.",
      ["Servidores públicos: direitos, nomeações e processos disciplinares", "Concursos públicos e eliminações indevidas", "Licitações e contratos administrativos", "Improbidade administrativa e Tribunal de Contas", "Mandado de Segurança contra atos do poder público"],
-     "Oito anos como Procurador Municipal deram ao escritório a visão de dentro da administração pública — o que faz diferença ao defender servidores, candidatos, empresas e gestores.",
+     "Oito anos como Procurador Municipal deram ao escritório a visão de dentro da administração pública — o que faz diferença ao defender servidores, candidatos, empresas e gestores. Atendimento online para todo o Brasil.",
      [("Fui eliminado de um concurso. Posso recorrer?", "Sim, pela via administrativa e, se for o caso, judicial — inclusive com Mandado de Segurança quando houver ilegalidade evidente."),
       ("Atendem prefeituras e gestores?", "Sim, com consultoria e defesa em licitações, contratos, Tribunal de Contas e improbidade administrativa."),
       ("O que é Mandado de Segurança?", "É a ação rápida para proteger direito líquido e certo violado por autoridade pública. Tem prazo de 120 dias — não deixe para depois.")]),
+    ("civil", "contrato", "Direito Civil", "Civil", "ricardo",
+     "Contratos, indenizações, cobranças, família, sucessões e questões imobiliárias, com consultoria preventiva e atuação judicial.",
+     ["Contratos: elaboração, revisão e descumprimento", "Indenizações por danos materiais e morais", "Cobranças, dívidas e negociação de acordos", "Família e sucessões: divórcio, pensão, inventário e testamento", "Imobiliário: compra e venda, locação, posse e usucapião"],
+     "O Direito Civil está nas decisões mais importantes da vida: um contrato, um imóvel, uma herança, um prejuízo a reparar. Orientação clara e atendimento online para todo o Brasil, por videochamada e WhatsApp.",
+     [("Vocês atendem clientes de outras cidades e estados?", "Sim. O atendimento em Direito Civil é feito online para todo o Brasil: consulta por videochamada ou WhatsApp, documentos e procuração assinados digitalmente e processo eletrônico acompanhado onde quer que ele tramite."),
+      ("Preciso de advogado para fazer ou revisar um contrato?", "É o melhor momento para ter um. Um contrato bem redigido evita a maior parte dos conflitos — e, se o problema já existe, analisamos as cláusulas e o caminho para resolvê-lo."),
+      ("Como funciona um inventário?", "Pode ser feito em cartório, quando há acordo entre os herdeiros e todos são maiores e capazes, ou pela via judicial. Explicamos os custos, prazos e documentos logo na primeira conversa.")]),
     ("penal", "balanca", "Direito Penal", "Penal", "jefferson",
      "Defesa técnica em inquéritos, processos criminais e execução penal, com atuação em Habeas Corpus e recursos.",
      ["Defesa em inquéritos policiais e ações penais", "Audiências de custódia e pedidos de liberdade", "Habeas Corpus e recursos aos tribunais", "Execução penal: progressão, remição e livramento", "Tribunal do Júri e crimes contra a vida"],
-     "Uma acusação criminal exige resposta rápida, técnica e serena. Atuamos desde a delegacia até os tribunais superiores, com a defesa dos direitos e garantias fundamentais como prioridade.",
+     "Uma acusação criminal exige resposta rápida, técnica e serena. Atuamos desde a delegacia até os tribunais superiores, com a defesa dos direitos e garantias fundamentais como prioridade — com atendimento online para todo o Brasil.",
      [("Fui intimado para depor na delegacia. Preciso de advogado?", "Sim — é o momento mais importante para orientar o que dizer e preservar seus direitos. Entre em contato antes de comparecer."),
       ("O que é Habeas Corpus?", "É a ação que protege a liberdade de locomoção contra prisão ou ameaça ilegal. Avaliamos o cabimento com urgência em cada caso."),
       ("Vocês atuam na execução da pena?", "Sim: progressão de regime, remição, livramento condicional e demais incidentes da execução penal.")]),
     ("previdenciario", "escudo", "Direito Previdenciário", "Previdenciário", "jefferson",
      "Aposentadorias, benefícios por incapacidade, pensões e revisões junto ao INSS, na via administrativa e judicial.",
      ["Aposentadoria por idade, tempo de contribuição e especial", "Auxílio por incapacidade e aposentadoria por invalidez", "BPC/LOAS para idosos e pessoas com deficiência", "Pensão por morte e salário-maternidade", "Revisão de benefícios e recursos contra negativas do INSS"],
-     "Benefício negado, atrasado ou calculado errado tem solução. Analisamos seu histórico contributivo e conduzimos o pedido ou a revisão no INSS e, quando necessário, na Justiça.",
+     "Benefício negado, atrasado ou calculado errado tem solução. Analisamos seu histórico contributivo e conduzimos o pedido ou a revisão no INSS e, quando necessário, na Justiça — tudo online, de qualquer lugar do Brasil.",
      [("Meu benefício foi negado pelo INSS. O que fazer?", "A negativa pode ser revista por recurso administrativo ou ação judicial. Traga a carta de indeferimento e os documentos para avaliarmos o melhor caminho."),
-      ("Quais documentos preciso levar?", "Documento de identidade, CPF, carteira de trabalho, carnês ou guias de contribuição, laudos médicos (se houver) e a senha do Meu INSS."),
+      ("Quais documentos preciso enviar?", "Documento de identidade, CPF, carteira de trabalho, carnês ou guias de contribuição, laudos médicos (se houver) e a senha do Meu INSS. Tudo pode ser enviado pelo WhatsApp ou e-mail, sem precisar ir ao escritório."),
       ("Quanto tempo leva?", "Depende do tipo de pedido e da via escolhida. Explicamos os prazos esperados logo na primeira análise.")]),
     ("tributario", "colunas", "Direito Tributário", "Tributário", "ricardo",
      "Defesa em execuções fiscais, consultoria e planejamento tributário para empresas, produtores e pessoas físicas.",
      ["Defesa em execuções fiscais e autos de infração", "Impugnações e recursos administrativos", "Restituição e compensação de tributos pagos a maior", "Parcelamentos e regularização fiscal", "Consultoria e planejamento tributário"],
-     "Tributos cobrados a mais, autuações e dívidas fiscais pesam no caixa. Atuamos na defesa e na organização tributária com a experiência de quem conhece a administração pública por dentro.",
+     "Tributos cobrados a mais, autuações e dívidas fiscais pesam no caixa. Atuamos na defesa e na organização tributária com a experiência de quem conhece a administração pública por dentro, com atendimento online para empresas e pessoas de todo o Brasil.",
      [("Recebi uma execução fiscal. Posso me defender?", "Sim. Há prazos curtos para embargos ou exceção de pré-executividade; procure orientação assim que for citado."),
-      ("Vocês atendem empresas e produtores rurais?", "Sim, pessoas físicas e jurídicas, inclusive produtores rurais e comerciantes."),
+      ("Vocês atendem empresas e produtores rurais?", "Sim, pessoas físicas e jurídicas de todo o Brasil, inclusive produtores rurais e comerciantes, com atendimento online."),
       ("É possível recuperar tributos pagos indevidamente?", "Em muitos casos, sim, dentro do prazo legal. Fazemos o levantamento e orientamos sobre restituição ou compensação.")]),
 ]
 AREA = {a[0]: a for a in AREAS}
@@ -138,6 +152,9 @@ I = {
     "escudo": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 3v6c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6z"/><path d="M9 12l2 2 4-4"/></svg>',
     "colunas": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M4 10h16M12 3 3 8h18zM6 10v8M10 10v8M14 10v8M18 10v8"/></svg>',
     "predio": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v16M16 9h3a1 1 0 0 1 1 1v11M3 21h18M8 7h4M8 11h4M8 15h4"/></svg>',
+    "contrato": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4M9 11h7M9 14.5h4"/><path d="M9 18.5c1-1.2 1.6-.4 2.2 0s1.4.8 2.3-.4"/></svg>',
+    "video": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="2"/><path d="M16 10l5-3v10l-5-3z"/></svg>',
+    "brasil": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg>',
     "check": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M8.5 12.5l2.5 2.5 4.5-5"/></svg>',
     "arrow": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>',
     "whats": '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.6 1.1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>',
@@ -198,7 +215,7 @@ def cabecalho(atual):
 <div class="faixa-topo">
   <div class="wrap">
     <span>{I["clock"]} {HORARIO_CURTO}</span>
-    <span class="faixa-end">{I["map"]} {ENDERECO.replace(" — ", ", ")}, Amargosa, BA</span>
+    <span class="faixa-end">{I["video"]} {ONLINE}</span>
     <a href="{wa(None, "ricardo")}" target="_blank" rel="noopener noreferrer">{I["whats"]} {r["cel"]}</a>
     <a href="{wa(None, "jefferson")}" target="_blank" rel="noopener noreferrer">{I["whats"]} {j["cel"]}</a>
   </div>
@@ -237,7 +254,7 @@ def painel_falar():
   <div class="wa-cab"><strong id="falar-titulo">Falar com quem?</strong><a class="wa-fechar" href="#" aria-label="Fechar">×</a></div>
   <p class="wa-sub">Escolha o advogado e a conversa abre no WhatsApp dele.</p>
   {opcao("ricardo")}{opcao("jefferson")}
-  <p class="wa-nota">Atendimento em horário comercial · {HORARIO_CURTO}</p>
+  <p class="wa-nota">Atendimento online para todo o Brasil · {HORARIO_CURTO}</p>
 </div>'''
 
 
@@ -248,7 +265,7 @@ def rodape():
     <div class="rodape-grade">
       <div class="rodape-marca">
         <a class="logo" href="{url("index")}" aria-label="{NOME}">{logo_img(True)}</a>
-        <p>Advocacia nas áreas administrativa, penal, previdenciária e tributária. Direito claro, acessível e humano.</p>
+        <p>Advocacia nas áreas administrativa, civil, penal, previdenciária e tributária. Atendimento online para todo o Brasil e presencial no escritório. Direito claro, acessível e humano.</p>
         <div class="sociais"><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">{I["insta"]} @andradevictoradv</a></div>
       </div>
       <div>
@@ -264,6 +281,7 @@ def rodape():
         <ul class="lista-contato">
           <li>{I["map"]}<span>{ENDERECO}<br>{CIDADE}</span></li>
           <li>{I["clock"]}<span>{HORARIO}</span></li>
+          <li>{I["video"]}<span>{ONLINE}</span></li>
           <li>{I["mail"]}<span><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
         </ul>
       </div>
@@ -288,28 +306,58 @@ def rodape():
 '''
 
 
+def canonica(slug):
+    return SITE + ("/" if slug == "index" else "/" + slug + "/")
+
+
 def schema(slug, titulo, descricao):
     org = {
         "@context": "https://schema.org",
         "@type": "LegalService",
+        "@id": SITE + "/#escritorio",
         "name": NOME,
+        "alternateName": NOME_CURTO,
         "url": SITE,
         "image": f"{SITE}/assets/img/og.jpg",
         "logo": f"{SITE}/assets/img/logo-av.png",
-        "description": "Escritório de advocacia: Direito Administrativo, Penal, Previdenciário e Tributário.",
+        "description": "Escritório de advocacia com atendimento online para todo o Brasil: Direito Administrativo, Civil, Penal, Previdenciário e Tributário.",
+        "slogan": "Direito claro, acessível e humano",
         "telephone": "+55 75 99864-9163",
         "email": EMAIL,
+        "priceRange": "$$",
         "address": {"@type": "PostalAddress", "streetAddress": "Rua Dr. Bertino Passos, 21, Centro", "addressLocality": "Amargosa", "addressRegion": "BA", "postalCode": "45300-000", "addressCountry": "BR"},
+        "areaServed": {"@type": "Country", "name": "Brasil"},
+        "availableChannel": [{"@type": "ServiceChannel", "name": "Atendimento online", "serviceUrl": SITE + "/contato/", "availableLanguage": "pt-BR"}],
         "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "17:00"}],
         "knowsAbout": [a[2] for a in AREAS],
-        "founder": [{"@type": "Person", "name": s["nome"], "jobTitle": "Advogado"} for s in SOCIOS.values()],
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Áreas de atuação", "itemListElement": [{"@type": "Offer", "itemOffered": {"@type": "Service", "name": a[2], "url": canonica(a[0]), "description": a[5], "areaServed": "BR"}} for a in AREAS]},
+        "founder": [{"@type": "Person", "name": s["nome"], "jobTitle": "Advogado", "url": SITE + "/socios/#" + k, "image": f"{SITE}/assets/img/socio-{k}-q.jpg", "knowsAbout": [AREA[a][2] for a in s["areas"]]} for k, s in SOCIOS.items()],
         "sameAs": [INSTAGRAM],
     }
-    return f'<script type="application/ld+json">{json.dumps(org, ensure_ascii=False)}</script>'
+    grafos = [org]
+    if slug != "index":
+        nome_pag = AREA[slug][2] if slug in AREA else dict(MENU).get(slug, titulo.split(" · ")[0])
+        grafos.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Início", "item": SITE + "/"},
+            *([{"@type": "ListItem", "position": 2, "name": "Áreas de atuação", "item": canonica("areas")}] if slug in AREA else []),
+            {"@type": "ListItem", "position": 3 if slug in AREA else 2, "name": nome_pag, "item": canonica(slug)}]})
+    if slug in AREA:
+        a = AREA[slug]
+        grafos.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": r}} for q, r in a[8]]})
+    return "\n".join(f'<script type="application/ld+json">{json.dumps(g, ensure_ascii=False)}</script>' for g in grafos)
+
+
+VERIFICACAO = {  # tokens de verificação dos motores de busca (Google Search Console / Bing Webmaster)
+    "google-site-verification": "voJmETPGiMVQqbX5KZfRUAvctrc4y5CIDCkihBugoog",
+    "msvalidate.01": "",
+}
 
 
 def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
-    canon = SITE + ("/" if slug == "index" else "/" + slug + "/")
+    canon = canonica(slug)
+    noindex = slug == "404"
+    robots = '<meta name="robots" content="noindex, follow">' if noindex else '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">'
+    verif = "".join(f'\n<meta name="{k}" content="{v}">' for k, v in VERIFICACAO.items() if v)
     return f'''<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -317,13 +365,21 @@ def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{html.escape(titulo)}</title>
 <meta name="description" content="{html.escape(descricao)}">
+{robots}{verif}
 <link rel="canonical" href="{canon}">
+<meta property="og:site_name" content="{NOME}">
+<meta property="og:locale" content="pt_BR">
+<meta property="og:url" content="{canon}">
 <meta property="og:title" content="{html.escape(titulo)}">
 <meta property="og:description" content="{html.escape(descricao)}">
 <meta property="og:image" content="{SITE}/{og}?v=2">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="{NOME} — atendimento online para todo o Brasil">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{html.escape(titulo)}">
+<meta name="twitter:description" content="{html.escape(descricao)}">
+<meta name="twitter:image" content="{SITE}/{og}?v=2">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0B0B0C">
 <link rel="icon" href="assets/img/icone-av-64.png" type="image/png" sizes="64x64">
@@ -395,11 +451,11 @@ def card_socio(k, completo=False):
 </article>'''
 
 
-def cta(titulo="Fale com um advogado", texto="Atendimento direto com os sócios, pelo WhatsApp ou no escritório. Conte sua situação e receba uma orientação clara sobre os próximos passos.", socio=None, msg=None):
+def cta(titulo="Fale com um advogado", texto="Atendimento direto com os sócios, online para todo o Brasil ou no escritório. Conte sua situação pelo WhatsApp e receba uma orientação clara sobre os próximos passos.", socio=None, msg=None):
     r, j = SOCIOS["ricardo"], SOCIOS["jefferson"]
     if socio:
         s = SOCIOS[socio]
-        botoes = btn_whats(f"WhatsApp · {s['nome']}", "btn btn-dourado", msg, socio, grande=True) + f'<a class="btn btn-contorno btn-grande" href="{url("contato")}">{I["map"]}<span>Visitar o escritório</span></a>'
+        botoes = btn_whats(f"WhatsApp · {s['nome']}", "btn btn-dourado", msg, socio, grande=True) + f'<a class="btn btn-contorno btn-grande" href="{url("contato")}">{I["video"]}<span>Consulta online</span></a>'
     else:
         botoes = btn_whats(f"WhatsApp · {r['nome']}", "btn btn-dourado", msg, "ricardo", grande=True) + btn_whats(f"WhatsApp · {j['nome']}", "btn btn-contorno", msg, "jefferson", grande=True)
     return f'''<section class="secao"><div class="wrap"><div class="cta revela">
@@ -410,7 +466,7 @@ def cta(titulo="Fale com um advogado", texto="Atendimento direto com os sócios,
 
 def hero_interno(eyebrow, titulo, lead, foto_nome, alt, itens=None, socio=None, msg=None, pos=None, ar=None):
     s = SOCIOS[socio] if socio else None
-    botoes = (btn_whats(f"Falar com {s['tratamento']}", "btn btn-dourado", msg, socio, grande=True) if s else btn_whats(grande=True)) + f'<a class="btn btn-contorno btn-grande" href="{url("contato")}">{I["map"]}<span>Como chegar</span></a>'
+    botoes = (btn_whats(f"Falar com {s['tratamento']}", "btn btn-dourado", msg, socio, grande=True) if s else btn_whats(grande=True)) + f'<a class="btn btn-contorno btn-grande" href="{url("contato")}">{I["video"]}<span>Atendimento online</span></a>'
     return f'''<section class="pagina-hero">
   <div class="wrap">
     <div class="hero-copy">
@@ -439,14 +495,30 @@ def dupla(foto_nome, alt, eyebrow, titulo, texto, itens=None, invertida=False, l
 
 def passos():
     itens = [
-        ("chat", "Primeiro contato", "Pelo WhatsApp ou no escritório. Você conta a situação e já recebe uma orientação inicial sobre urgências e prazos."),
-        ("doc", "Análise do caso", "Reunimos documentos, estudamos o processo e os riscos e definimos, com você, a estratégia mais adequada."),
-        ("alvo", "Acompanhamento", "Honorários combinados por escrito, atualização constante e condução do caso até o fim — na via administrativa ou judicial."),
+        ("chat", "Primeiro contato", "Pelo WhatsApp, por videochamada ou no escritório, de qualquer lugar do Brasil. Você conta a situação e já recebe uma orientação inicial sobre urgências e prazos."),
+        ("doc", "Análise do caso", "Você envia os documentos pelo WhatsApp ou e-mail; estudamos o processo e os riscos e definimos, com você, a estratégia mais adequada."),
+        ("alvo", "Acompanhamento", "Honorários combinados por escrito, procuração assinada digitalmente, atualização constante e condução do caso até o fim — na via administrativa ou judicial."),
     ]
     lis = "".join(f'<li class="revela"><span class="passo-num">{i + 1}</span><span class="passo-icone">{I[ic]}</span><h3>{t}</h3><p>{d}</p></li>' for i, (ic, t, d) in enumerate(itens))
     return f'''<section class="secao secao-escura secao-passos"><div class="wrap">
   {secao_titulo("Como funciona", "Do primeiro contato à solução", "Um caminho simples e transparente, explicado em linguagem clara desde a primeira conversa.")}
   <ol class="passos">{lis}</ol>
+</div></section>'''
+
+
+def online_secao(escura=True, titulo="Advogados online para todo o Brasil"):
+    """Faixa de cards sobre o atendimento online (home, escritório e contato)."""
+    cards = [
+        ("video", "Consulta por videochamada", "Reunião online pelo WhatsApp ou pela plataforma que você preferir, no horário combinado — sem deslocamento."),
+        ("doc", "Documentos digitais", "Envio de documentos pelo WhatsApp ou e-mail e procuração com assinatura eletrônica, com validade jurídica."),
+        ("brasil", "Em qualquer cidade do Brasil", "Processos eletrônicos acompanhados em qualquer comarca ou tribunal do país, inclusive nos tribunais superiores."),
+        ("map", "Presencial, se preferir", f"Escritório aberto de segunda a sexta, com hora marcada, para quem quiser conversar pessoalmente."),
+    ]
+    lis = "".join(f'<article class="card revela"><span class="icone">{I[ic]}</span><h3>{t}</h3><p>{d}</p></article>' for ic, t, d in cards)
+    return f'''<section class="secao {"secao-escura" if escura else "secao-clara"} secao-online" id="online"><div class="wrap">
+  {secao_titulo("Atendimento online", titulo, "Você não precisa estar na mesma cidade para ter um advogado de confiança. Da primeira conversa à sentença, tudo pode ser feito a distância — com a mesma atenção do atendimento presencial.", centro=True)}
+  <div class="grade-4">{lis}</div>
+  <div class="ver-todos">{btn_whats("Agendar consulta online", grande=True)}</div>
 </div></section>'''
 
 
@@ -481,7 +553,7 @@ def home():
   <div class="hero-dupla" aria-label="Os sócios">
     <div class="moldura">{foto("socios-dupla", "Dr. Ricardo Andrade e Dr. Jefferson Victor, sócios do escritório", prioridade=True, sizes="100vw")}</div>
     <div class="hero-dupla-nomes">
-      <a href="{url("socios")}#ricardo"><b>{r["tratamento"]}</b><small>Administrativo · Tributário</small></a>
+      <a href="{url("socios")}#ricardo"><b>{r["tratamento"]}</b><small>Administrativo · Civil · Tributário</small></a>
       <a href="{url("socios")}#jefferson"><b>{j["tratamento"]}</b><small>Penal · Previdenciário</small></a>
     </div>
     <div class="hero-dupla-numeros" aria-label="Números do escritório">
@@ -496,13 +568,13 @@ def home():
   </div>
   <div class="wrap">
     <div class="hero-copy">
-      <span class="eyebrow">Advogados associados</span>
+      <span class="eyebrow">Advogados associados · atendimento online em todo o Brasil</span>
       <h1 class="hero-titulo">Direito claro, acessível e <em>humano</em>.</h1>
-      <p class="hero-lead">Há quase dez anos, Jefferson Victor e Ricardo Andrade atuam com estratégia, técnica e compromisso nas áreas administrativa, penal, previdenciária e tributária — do primeiro atendimento aos tribunais superiores.</p>
+      <p class="hero-lead">Há quase dez anos, Jefferson Victor e Ricardo Andrade atuam com estratégia, técnica e compromisso nas áreas administrativa, civil, penal, previdenciária e tributária. Atendimento online para todo o Brasil, por videochamada e WhatsApp — do primeiro contato aos tribunais superiores.</p>
       <div class="hero-acoes">{btn_whats("Falar com um advogado", grande=True)}<a class="btn btn-contorno btn-grande" href="{url("areas")}">Áreas de atuação {I["arrow"]}</a></div>
       <ul class="hero-provas">
+        <li>{I["check"]}<span><b>Atendimento online</b> em todo o Brasil</span></li>
         <li>{I["check"]}<span><b>Quase 10 anos</b> de atuação</span></li>
-        <li>{I["check"]}<span><b>Pós-graduações</b> PUC Minas e outras</span></li>
         <li>{I["check"]}<span>Atuação em <b>tribunais superiores</b></span></li>
       </ul>
     </div>
@@ -517,9 +589,11 @@ def home():
   <div class="wrap"><ul class="lema-lista"><li>Estratégia</li><li>Técnica</li><li>Compromisso</li><li>Resultados</li></ul><p>A defesa dos seus direitos é a nossa missão.</p></div>
 </section>
 
+{online_secao()}
+
 <section class="secao secao-clara secao-areas" id="areas">
   <div class="wrap">
-    <div class="areas-cab">{secao_titulo("Áreas de atuação", "Quatro frentes, dois sócios dedicados", "Cada área tem um sócio responsável, que acompanha o caso pessoalmente do início ao fim.")}<a class="btn btn-contorno-escuro" href="{url("areas")}">Todas as áreas {I["arrow"]}</a></div>
+    <div class="areas-cab">{secao_titulo("Áreas de atuação", "Cinco frentes, dois sócios dedicados", "Cada área tem um sócio responsável, que acompanha o caso pessoalmente do início ao fim — presencialmente ou online, de onde você estiver.")}<a class="btn btn-contorno-escuro" href="{url("areas")}">Todas as áreas {I["arrow"]}</a></div>
     <div class="areas">{areas}</div>
   </div>
 </section>
@@ -543,8 +617,9 @@ def home():
 
 <section class="secao secao-escura secao-contato-home"><div class="wrap">
   <div class="contato-home">
-    <div class="revela">{secao_titulo("Onde estamos", "Escritório e atendimento", "Atendimento presencial com hora marcada, pelo WhatsApp ou por videochamada, em horário comercial.")}
+    <div class="revela">{secao_titulo("Onde estamos", "Escritório e atendimento online", "Atendimento online para todo o Brasil, por videochamada e WhatsApp, e presencial com hora marcada, em horário comercial.")}
       <ul class="lista-contato grande">
+        <li>{I["video"]}<span>{ONLINE}<br>Videochamada, WhatsApp e documentos digitais</span></li>
         <li>{I["map"]}<span>{ENDERECO}<br>{CIDADE}</span></li>
         <li>{I["clock"]}<span>{HORARIO}</span></li>
         <li>{I["insta"]}<span><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">@andradevictoradv</a></span></li>
@@ -564,10 +639,11 @@ def areas_pg():
     return f'''
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
   <span class="eyebrow">Áreas de atuação</span>
-  <h1 class="hero-titulo">Quatro áreas, um sócio responsável</h1>
-  <p class="hero-lead">Direito Administrativo e Tributário com Ricardo Andrade; Direito Penal e Previdenciário com Jefferson Victor. Em casos que cruzam mais de uma área, os dois sócios atuam juntos.</p>
+  <h1 class="hero-titulo">Cinco áreas, um sócio responsável</h1>
+  <p class="hero-lead">Direito Administrativo, Civil e Tributário com Ricardo Andrade; Direito Penal e Previdenciário com Jefferson Victor. Em casos que cruzam mais de uma área, os dois sócios atuam juntos — com atendimento online para todo o Brasil.</p>
 </div></div></section>
 <section class="secao secao-clara"><div class="wrap"><div class="areas">{cards}</div></div></section>
+{online_secao(titulo="Todas as áreas, com atendimento online")}
 {cta()}
 '''
 
@@ -625,7 +701,7 @@ def socios_pg():
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
   <span class="eyebrow">Os sócios</span>
   <h1 class="hero-titulo">Dois advogados, um compromisso com você</h1>
-  <p class="hero-lead">Formação sólida, passagem pelo Judiciário e pela administração pública, e atendimento direto. Conheça quem assina cada caso.</p>
+  <p class="hero-lead">Formação sólida, passagem pelo Judiciário e pela administração pública, e atendimento direto — online para todo o Brasil ou no escritório. Conheça quem assina cada caso.</p>
 </div></div></section>
 {secoes}
 {cta()}
@@ -641,12 +717,13 @@ def escritorio_pg():
     ]
     cards = "".join(f'<article class="card revela"><span class="icone">{I[ic]}</span><h3>{t}</h3><p>{d}</p></article>' for ic, t, d in valores)
     return f'''
-{hero_interno("O escritório", "Advocacia com ética, técnica e empatia", "Andrade e Victor Advogados Associados nasceu da parceria entre dois advogados com quase dez anos de estrada, formação complementar e um mesmo jeito de trabalhar: direito claro, acessível e humano.", "escritorio-jefferson", "Jefferson Victor em atendimento no escritório", itens=["Atendimento presencial, pelo WhatsApp e por videochamada", "Áreas administrativa, penal, previdenciária e tributária", "Atuação em todas as instâncias, inclusive tribunais superiores"], pos="center 20%", ar="4 / 4.4")}
+{hero_interno("O escritório", "Advocacia com ética, técnica e empatia", "Andrade e Victor Advogados Associados nasceu da parceria entre dois advogados com quase dez anos de estrada, formação complementar e um mesmo jeito de trabalhar: direito claro, acessível e humano — para clientes de todo o Brasil.", "escritorio-jefferson", "Jefferson Victor em atendimento no escritório", itens=["Atendimento online para todo o Brasil, por videochamada e WhatsApp", "Áreas administrativa, civil, penal, previdenciária e tributária", "Atuação em todas as instâncias, inclusive tribunais superiores"], pos="center 20%", ar="4 / 4.4")}
 <section class="secao secao-clara"><div class="wrap">
   {secao_titulo("Nossos valores", "O que orienta cada caso", centro=True)}
   <div class="grade-4">{cards}</div>
 </div></section>
-{dupla("hero-ricardo", "Ricardo Andrade, advogado", "Trajetória", "Do Judiciário e da gestão pública para a sua defesa", "Jefferson Victor foi Juiz Leigo e Conciliador do TJBA; Ricardo Andrade foi Procurador Municipal por oito anos. Essa vivência dos dois lados do balcão — decidindo e defendendo o interesse público — hoje se traduz em estratégia e técnica a serviço de quem procura o escritório.", ["Quase dez anos de advocacia", "Quatro pós-graduações entre os sócios", "Atuação em tribunais superiores"], invertida=True, link=url("socios"), link_txt="Conhecer os sócios", pos="center 20%", escura=True, ar="4 / 5", ar_m="4 / 4.2")}
+{online_secao(titulo="Como funciona o atendimento online")}
+{dupla("hero-ricardo", "Ricardo Andrade, advogado", "Trajetória", "Do Judiciário e da gestão pública para a sua defesa", "Jefferson Victor foi Juiz Leigo e Conciliador do TJBA; Ricardo Andrade foi Procurador Municipal por oito anos. Essa vivência dos dois lados do balcão — decidindo e defendendo o interesse público — hoje se traduz em estratégia e técnica a serviço de quem procura o escritório, de qualquer lugar do Brasil.", ["Quase dez anos de advocacia", "Quatro pós-graduações entre os sócios", "Atuação em tribunais superiores"], invertida=True, link=url("socios"), link_txt="Conhecer os sócios", pos="center 20%", escura=False, ar="4 / 5", ar_m="4 / 4.2")}
 <section class="secao secao-clara"><div class="wrap">
   {secao_titulo("Em números", "Experiência que se traduz em segurança", centro=True)}
   {numeros()}
@@ -661,12 +738,13 @@ def contato_pg():
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
   <span class="eyebrow">Contato</span>
   <h1 class="hero-titulo">Fale com o escritório</h1>
-  <p class="hero-lead">Pelo WhatsApp de cada sócio, pelo formulário ou pessoalmente, no escritório. Respondemos em horário comercial.</p>
+  <p class="hero-lead">Atendimento online para todo o Brasil pelo WhatsApp de cada sócio, por videochamada ou pelo formulário — e presencial, com hora marcada, no escritório. Respondemos em horário comercial.</p>
 </div></div></section>
 <section class="secao secao-clara"><div class="wrap contato-grade">
   <div class="contato-info revela">
-    <h2>Escritório</h2>
+    <h2>Escritório e atendimento online</h2>
     <ul class="lista-contato grande">
+      <li>{I["video"]}<span><b>{ONLINE}</b><br>Videochamada, WhatsApp e documentos digitais</span></li>
       <li>{I["map"]}<span><b>Endereço</b><br>{ENDERECO}<br>{CIDADE}</span></li>
       <li>{I["clock"]}<span><b>Horário</b><br>{HORARIO}</span></li>
       <li>{I["mail"]}<span><b>E-mail</b><br><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
@@ -678,10 +756,11 @@ def contato_pg():
   </div>
   <div class="contato-form revela">
     <h2>Envie uma mensagem</h2>
-    <p>Descreva brevemente a situação. Um dos sócios retorna o contato.</p>
+    <p>Descreva brevemente a situação e de onde você fala. Um dos sócios retorna o contato.</p>
     {formulario()}
   </div>
 </div></section>
+{online_secao(titulo="Como funciona o atendimento online")}
 '''
 
 
@@ -719,16 +798,24 @@ def pagina_404():
 
 
 PAGINAS = {
-    "index": ("Andrade e Victor Advogados Associados", "Escritório de advocacia: Direito Administrativo, Penal, Previdenciário e Tributário. Direito claro, acessível e humano.", home),
-    "areas": ("Áreas de atuação · Andrade e Victor Advogados", "Direito Administrativo, Penal, Previdenciário e Tributário, com sócio responsável por área.", areas_pg),
-    "socios": ("Sócios · Jefferson Victor e Ricardo Andrade", "Conheça os advogados Jefferson Victor e Ricardo Andrade: formação, experiência e áreas de atuação.", socios_pg),
-    "escritorio": ("O escritório · Andrade e Victor Advogados", "Advocacia com ética, técnica e empatia. Conheça a história e os valores do escritório.", escritorio_pg),
-    "contato": ("Contato · Andrade e Victor Advogados", "Fale com o escritório Andrade e Victor: WhatsApp dos sócios, endereço, horário e formulário.", contato_pg),
-    "privacidade": ("Política de privacidade · Andrade e Victor Advogados", "Como o site do escritório trata os dados de contato.", privacidade_pg),
+    "index": ("Andrade e Victor Advogados · Atendimento online em todo o Brasil", "Escritório de advocacia com atendimento online para todo o Brasil: Direito Administrativo, Civil, Penal, Previdenciário e Tributário. Consulta por videochamada ou WhatsApp.", home),
+    "areas": ("Áreas de atuação · Advogados online | Andrade e Victor", "Direito Administrativo, Civil, Penal, Previdenciário e Tributário, com sócio responsável por área e atendimento online para todo o Brasil.", areas_pg),
+    "socios": ("Sócios · Ricardo Andrade e Jefferson Victor, advogados", "Conheça os advogados Ricardo Andrade (OAB/BA 57.064) e Jefferson Victor (OAB/BA 55.402): formação, experiência e áreas de atuação. Atendimento online em todo o Brasil.", socios_pg),
+    "escritorio": ("O escritório · Andrade e Victor Advogados Associados", "Advocacia com ética, técnica e empatia e atendimento online para todo o Brasil. Conheça a história, os valores e a forma de trabalhar do escritório.", escritorio_pg),
+    "contato": ("Contato · Consulta online com advogado | Andrade e Victor", "Fale com o escritório Andrade e Victor: WhatsApp dos sócios, consulta online por videochamada para todo o Brasil, e-mail, endereço e horário.", contato_pg),
+    "privacidade": ("Política de privacidade · Andrade e Victor Advogados", "Como o site do escritório Andrade e Victor Advogados trata os dados de quem entra em contato.", privacidade_pg),
     "404": ("Página não encontrada · Andrade e Victor Advogados", "A página que você procura não existe.", pagina_404),
 }
+SEO_AREAS = {  # título e descrição de busca de cada área (atendimento online em todo o Brasil)
+    "administrativo": ("Advogado de Direito Administrativo online · Andrade e Victor", "Advogado especializado em Direito Administrativo com atendimento online para todo o Brasil: servidores públicos, concursos, licitações, contratos e Mandado de Segurança."),
+    "civil": ("Advogado de Direito Civil online · Andrade e Victor", "Advogado de Direito Civil com atendimento online para todo o Brasil: contratos, indenizações, cobranças, família, inventário e questões imobiliárias."),
+    "penal": ("Advogado Criminalista online · Andrade e Victor", "Advogado criminalista com atendimento online para todo o Brasil: defesa em inquéritos e processos criminais, Habeas Corpus, recursos e execução penal."),
+    "previdenciario": ("Advogado Previdenciário online · Andrade e Victor", "Advogado previdenciário com atendimento online para todo o Brasil: aposentadorias, benefícios por incapacidade, BPC/LOAS, pensões e revisões no INSS."),
+    "tributario": ("Advogado Tributarista online · Andrade e Victor", "Advogado tributarista com atendimento online para todo o Brasil: execuções fiscais, autos de infração, restituição de tributos e planejamento tributário."),
+}
 for a in AREAS:
-    PAGINAS[a[0]] = (f"{a[2]} · Andrade e Victor Advogados", a[5], (lambda a=a: area_pg(a)))
+    t, d = SEO_AREAS.get(a[0], (f"{a[2]} · Andrade e Victor Advogados", a[5]))
+    PAGINAS[a[0]] = (t, d, (lambda a=a: area_pg(a)))
 
 
 def main():
@@ -747,7 +834,17 @@ def main():
         else:
             (DIST / f"{slug}.html").write_text(out, encoding="utf-8")
     (DIST / "_redirects").write_text("/index.html / 301\n", encoding="utf-8")
-    print(f"ok → {DIST} ({len(PAGINAS)} páginas, links {'limpos' if LIMPO else '.html'})")
+    (DIST / "google54d106e30fb959fe.html").write_text("google-site-verification: google54d106e30fb959fe.html", encoding="utf-8")  # Search Console (arquivo)
+    # SEO: sitemap.xml e robots.txt (sempre com as URLs canônicas do site publicado)
+    import datetime
+    hoje = datetime.date.today().isoformat()
+    prioridade = {"index": "1.0", "areas": "0.9", "contato": "0.8", "socios": "0.8", "escritorio": "0.7", "privacidade": "0.3"}
+    urls = [(canonica(s), prioridade.get(s, "0.9")) for s in PAGINAS if s != "404"]
+    (DIST / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+                                      + "".join(f"  <url><loc>{u}</loc><lastmod>{hoje}</lastmod><changefreq>monthly</changefreq><priority>{p}</priority></url>\n" for u, p in urls)
+                                      + "</urlset>\n", encoding="utf-8")
+    (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /404.html\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    print(f"ok → {DIST} ({len(PAGINAS)} páginas, links {'limpos' if LIMPO else '.html'}, sitemap com {len(urls)} URLs)")
 
 
 if __name__ == "__main__":
