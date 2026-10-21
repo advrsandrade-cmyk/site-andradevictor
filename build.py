@@ -316,7 +316,10 @@ def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
 <link rel="canonical" href="{canon}">
 <meta property="og:title" content="{html.escape(titulo)}">
 <meta property="og:description" content="{html.escape(descricao)}">
-<meta property="og:image" content="{SITE}/{og}">
+<meta property="og:image" content="{SITE}/{og}?v=2">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <meta property="og:type" content="website">
 <meta name="theme-color" content="#0B0B0C">
 <link rel="icon" href="assets/img/icone-av-64.png" type="image/png" sizes="64x64">
