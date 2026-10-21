@@ -122,11 +122,12 @@ AREAS = [
 ]
 AREA = {a[0]: a for a in AREAS}
 
+# Regra Nexus (menus): itens com mais de uma palavra em Título Com Maiúsculas (ex.: "O Escritório", "Áreas de Atuação")
 MENU = [
     ("index", "Início"),
-    ("areas", "Áreas de atuação"),  # abre submenu
+    ("areas", "Áreas de Atuação"),  # abre submenu
     ("socios", "Sócios"),
-    ("escritorio", "O escritório"),
+    ("escritorio", "O Escritório"),
     ("contato", "Contato"),
 ]
 SUBMENU = [(a[0], a[2]) for a in AREAS]
@@ -200,13 +201,13 @@ def cabecalho(atual):
             subs = "".join(f'<a href="{url(x)}"{" aria-current=\"page\"" if x == atual else ""}>{I["arrow"]}{y}</a>' for x, y in SUBMENU)
             return f'''<div class="tem-sub{" ativo" if ativo else ""}">
         <button type="button" class="sub-btn" aria-expanded="false" aria-haspopup="true" aria-controls="sub-areas">{n} {I["chev"]}</button>
-        <div class="submenu" id="sub-areas">{subs}<a class="sub-todos" href="{url("areas")}">Todas as áreas {I["arrow"]}</a></div>
+        <div class="submenu" id="sub-areas">{subs}<a class="sub-todos" href="{url("areas")}">Todas as Áreas {I["arrow"]}</a></div>
       </div>'''
         return f'<a href="{url(s)}"{" aria-current=\"page\"" if s == atual else ""}>{n}</a>'
 
     itens = "".join(item(s, n) for s, n in MENU)
     mob = "".join(
-        (f'<details{" open" if atual in AREA or atual == "areas" else ""}><summary>{n} {I["chev"]}</summary>' + "".join(f'<a href="{url(x)}"{" aria-current=\"page\"" if x == atual else ""}>{y}</a>' for x, y in SUBMENU) + f'<a href="{url("areas")}">Todas as áreas</a></details>')
+        (f'<details{" open" if atual in AREA or atual == "areas" else ""}><summary>{n} {I["chev"]}</summary>' + "".join(f'<a href="{url(x)}"{" aria-current=\"page\"" if x == atual else ""}>{y}</a>' for x, y in SUBMENU) + f'<a href="{url("areas")}">Todas as Áreas</a></details>')
         if s == "areas" else f'<a href="{url(s)}"{" aria-current=\"page\"" if s == atual else ""}>{n}</a>'
         for s, n in MENU
     )
@@ -260,6 +261,7 @@ def painel_falar():
 
 def rodape():
     r, j = SOCIOS["ricardo"], SOCIOS["jefferson"]
+    JS_V = versao_asset("assets/js/site.js")
     return f'''<footer class="rodape">
   <div class="wrap">
     <div class="rodape-grade">
@@ -302,7 +304,7 @@ def rodape():
 </footer>
 {flutuante()}
 {painel_falar()}
-<script src="assets/js/site.js"></script>
+<script src="assets/js/site.js?v={JS_V}"></script>
 '''
 
 
@@ -354,8 +356,15 @@ VERIFICACAO = {  # tokens de verificação dos motores de busca (Google Search C
 }
 
 
+def versao_asset(rel):
+    """Sufixo ?v=<hash> para CSS/JS: navegadores e CDNs pegam a versão nova logo após cada publicação."""
+    import hashlib
+    return hashlib.md5((SRC / rel).read_bytes()).hexdigest()[:8]
+
+
 def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
     canon = canonica(slug)
+    css_v, js_v = versao_asset("assets/css/site.css"), versao_asset("assets/js/site.js")
     noindex = slug == "404"
     robots = '<meta name="robots" content="noindex, follow">' if noindex else '<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">'
     verif = "".join(f'\n<meta name="{k}" content="{v}">' for k, v in VERIFICACAO.items() if v)
@@ -388,7 +397,7 @@ def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
 <link rel="apple-touch-icon" href="assets/img/icone-av-256.png">
 <link rel="preload" href="assets/fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="assets/css/site.css">
+<link rel="stylesheet" href="assets/css/site.css?v={css_v}">
 {schema(slug, titulo, descricao)}
 </head>
 <body>
