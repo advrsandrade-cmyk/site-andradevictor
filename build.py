@@ -347,6 +347,7 @@ def schema(slug, titulo, descricao):
     return "\n".join(f'<script type="application/ld+json">{json.dumps(g, ensure_ascii=False)}</script>' for g in grafos)
 
 
+INDEXNOW_KEY = "1590f818c4af16e2bf718cde7ffb1124"  # chave IndexNow (Bing, Yandex, Naver…): o arquivo /<chave>.txt prova a propriedade do site
 VERIFICACAO = {  # tokens de verificação dos motores de busca (Google Search Console / Bing Webmaster)
     "google-site-verification": "voJmETPGiMVQqbX5KZfRUAvctrc4y5CIDCkihBugoog",
     "msvalidate.01": "",
@@ -835,6 +836,7 @@ def main():
             (DIST / f"{slug}.html").write_text(out, encoding="utf-8")
     (DIST / "_redirects").write_text("/index.html / 301\n", encoding="utf-8")
     (DIST / "google54d106e30fb959fe.html").write_text("google-site-verification: google54d106e30fb959fe.html", encoding="utf-8")  # Search Console (arquivo)
+    (DIST / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")  # IndexNow
     # SEO: sitemap.xml e robots.txt (sempre com as URLs canônicas do site publicado)
     import datetime
     hoje = datetime.date.today().isoformat()
