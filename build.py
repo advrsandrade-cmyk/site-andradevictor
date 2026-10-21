@@ -480,6 +480,15 @@ def home():
       <a href="{url("socios")}#ricardo"><b>{r["tratamento"]}</b><small>Administrativo · Tributário</small></a>
       <a href="{url("socios")}#jefferson"><b>{j["tratamento"]}</b><small>Penal · Previdenciário</small></a>
     </div>
+    <div class="hero-dupla-numeros" aria-label="Números do escritório">
+      <div><strong>10</strong><span>anos de advocacia</span></div>
+      <div><strong>4</strong><span>pós-graduações</span></div>
+      <div><strong>8</strong><span>anos na Procuradoria Municipal</span></div>
+    </div>
+    <ul class="hero-dupla-cred">
+      <li>{I["check"]}<span><b>Jefferson</b> — ex-Juiz Leigo e Conciliador do TJBA, pós em Ciências Criminais (PUC Minas)</span></li>
+      <li>{I["check"]}<span><b>Ricardo</b> — OAB/BA 57064, ex-Procurador Municipal, atuação em tribunais superiores</span></li>
+    </ul>
   </div>
   <div class="wrap">
     <div class="hero-copy">
