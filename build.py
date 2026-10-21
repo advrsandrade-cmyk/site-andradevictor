@@ -4,7 +4,7 @@ Uso: python3 build.py            → links como arquivo.html (prévia/artefato)
      python3 build.py --limpo    → links limpos (/direito-penal/) para Cloudflare Pages
 
 Proposta Nexus Digital Group (19/10/2026). Conteúdo levantado nas publicações do escritório
-(@andradevictoradv, Linktree, perfis dos sócios e ficha do Google). Itens marcados CONFIRMAR precisam
+(@andradevictoradv, Linktree, perfis dos sócios e ficha do Google). Dados de contato e OAB conferidos no cartão de visita (out/2026). Itens marcados CONFIRMAR precisam
 de validação com o cliente. Publicidade dentro do Provimento 205/2021 da OAB: informativa, sem promessa
 de resultado, sem preços, sem depoimentos de clientes.
 """
@@ -20,11 +20,12 @@ NOME = "Andrade e Victor Advogados Associados"
 NOME_CURTO = "Andrade e Victor"
 SITE = "https://www.andradevictoradvogados.com.br"
 INSTAGRAM = "https://www.instagram.com/andradevictoradv/"
-ENDERECO = "Rua Conselheiro Dantas, 488 — Centro"  # Linktree do escritório. CONFIRMAR: a ficha do Google traz Av. Dr. Abelardo Velloso, 488
+ENDERECO = "Rua Dr. Bertino Passos, 21 — Centro"  # conforme o cartão de visita do escritório
+EMAIL = "andradevictoradvogados@gmail.com"  # cartão de visita
 CIDADE = "Amargosa, BA · CEP 45300-000"
 HORARIO = "Segunda a sexta, 9h às 17h"
 HORARIO_CURTO = "Seg. a sex. 9h–17h"
-MAPS = "https://www.google.com/maps/search/?api=1&query=" + quote("Rua Conselheiro Dantas, 488, Centro, Amargosa - BA")
+MAPS = "https://www.google.com/maps/search/?api=1&query=" + quote("Rua Dr. Bertino Passos, 21, Centro, Amargosa - BA")
 WHATSAPP_TEXTO = "Olá! Vim pelo site do escritório Andrade e Victor e gostaria de falar com um advogado."
 
 SOCIOS = {
@@ -32,7 +33,7 @@ SOCIOS = {
         "nome": "Jefferson Victor",
         "tratamento": "Dr. Jefferson Victor",
         "cargo": "Advogado · Sócio",
-        "oab": "OAB/BA",  # CONFIRMAR número da inscrição
+        "oab": "OAB/BA 55.402",
         "cel": "(75) 99232-0286",
         "whats": "5575992320286",
         "areas": ["penal", "previdenciario"],
@@ -54,7 +55,7 @@ SOCIOS = {
         "nome": "Ricardo Andrade",
         "tratamento": "Dr. Ricardo Andrade",
         "cargo": "Advogado · Sócio",
-        "oab": "OAB/BA 57064",
+        "oab": "OAB/BA 57.064",
         "cel": "(75) 99864-9163",
         "whats": "5575998649163",
         "areas": ["administrativo", "tributario"],
@@ -142,6 +143,7 @@ I = {
     "whats": '<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.5l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.2.3-.9.9-.9 2.2s.9 2.6 1.1 2.7c.1.2 1.8 2.8 4.4 3.9 1.6.7 2.3.8 3.1.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.1-1.2l-.5-.3z"/></svg>',
     "map": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s6-5.3 6-10a6 6 0 1 0-12 0c0 4.7 6 10 6 10z"/><circle cx="12" cy="11" r="2.2"/></svg>',
     "clock": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+    "mail": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>',
     "phone": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z"/></svg>',
     "insta": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor"/></svg>',
     "chev": '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></svg>',
@@ -262,6 +264,7 @@ def rodape():
         <ul class="lista-contato">
           <li>{I["map"]}<span>{ENDERECO}<br>{CIDADE}</span></li>
           <li>{I["clock"]}<span>{HORARIO}</span></li>
+          <li>{I["mail"]}<span><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
         </ul>
       </div>
       <div>
@@ -295,7 +298,8 @@ def schema(slug, titulo, descricao):
         "logo": f"{SITE}/assets/img/logo-av.png",
         "description": "Escritório de advocacia: Direito Administrativo, Penal, Previdenciário e Tributário.",
         "telephone": "+55 75 99864-9163",
-        "address": {"@type": "PostalAddress", "streetAddress": "Rua Conselheiro Dantas, 488, Centro", "addressLocality": "Amargosa", "addressRegion": "BA", "postalCode": "45300-000", "addressCountry": "BR"},
+        "email": EMAIL,
+        "address": {"@type": "PostalAddress", "streetAddress": "Rua Dr. Bertino Passos, 21, Centro", "addressLocality": "Amargosa", "addressRegion": "BA", "postalCode": "45300-000", "addressCountry": "BR"},
         "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "17:00"}],
         "knowsAbout": [a[2] for a in AREAS],
         "founder": [{"@type": "Person", "name": s["nome"], "jobTitle": "Advogado"} for s in SOCIOS.values()],
@@ -487,7 +491,7 @@ def home():
     </div>
     <ul class="hero-dupla-cred">
       <li>{I["check"]}<span><b>Jefferson</b> — ex-Juiz Leigo e Conciliador do TJBA, pós em Ciências Criminais (PUC Minas)</span></li>
-      <li>{I["check"]}<span><b>Ricardo</b> — OAB/BA 57064, ex-Procurador Municipal, atuação em tribunais superiores</span></li>
+      <li>{I["check"]}<span><b>Ricardo</b> — OAB/BA 57.064, ex-Procurador Municipal, atuação em tribunais superiores</span></li>
     </ul>
   </div>
   <div class="wrap">
@@ -665,6 +669,7 @@ def contato_pg():
     <ul class="lista-contato grande">
       <li>{I["map"]}<span><b>Endereço</b><br>{ENDERECO}<br>{CIDADE}</span></li>
       <li>{I["clock"]}<span><b>Horário</b><br>{HORARIO}</span></li>
+      <li>{I["mail"]}<span><b>E-mail</b><br><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
       <li>{I["whats"]}<span><b>{r["tratamento"]}</b> · {r["foco"]}<br><a href="{wa(None, "ricardo")}" target="_blank" rel="noopener noreferrer">{r["cel"]}</a></span></li>
       <li>{I["whats"]}<span><b>{j["tratamento"]}</b> · {j["foco"]}<br><a href="{wa(None, "jefferson")}" target="_blank" rel="noopener noreferrer">{j["cel"]}</a></span></li>
       <li>{I["insta"]}<span><b>Instagram</b><br><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">@andradevictoradv</a></span></li>
