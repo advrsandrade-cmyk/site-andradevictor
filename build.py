@@ -421,6 +421,11 @@ def faq(itens):
     return '<div class="faq revela">' + "".join(f"<details><summary>{q}{I['chev']}</summary><p>{a}</p></details>" for q, a in itens) + "</div>"
 
 
+def trilho_nav():
+    """Setas e barra de progresso de uma fileira que rola lateralmente (desktop/tablet)."""
+    return f'<div class="trilho-nav"><div class="trilho-barra" aria-hidden="true"><i></i></div><button type="button" data-ant aria-label="Anterior">{I["arrow"]}</button><button type="button" data-prox aria-label="Próximo">{I["arrow"]}</button></div>'
+
+
 def card_area(a, numero=None):
     slug, icone, nome, _, resp, resumo, itens, _, _ = a
     s = SOCIOS[resp]
@@ -595,7 +600,8 @@ def home():
 <section class="secao secao-clara secao-areas" id="areas">
   <div class="wrap">
     <div class="areas-cab">{secao_titulo("Áreas de atuação", "Cinco frentes, dois sócios dedicados", "Cada área tem um sócio responsável, que acompanha o caso pessoalmente do início ao fim — presencialmente ou online, de onde você estiver.")}<a class="btn btn-contorno-escuro" href="{url("areas")}">Todas as áreas {I["arrow"]}</a></div>
-    <div class="areas">{areas}</div>
+    <div class="areas" data-trilho>{areas}</div>
+    {trilho_nav()}
   </div>
 </section>
 
@@ -643,7 +649,7 @@ def areas_pg():
   <h1 class="hero-titulo">Cinco áreas, um sócio responsável</h1>
   <p class="hero-lead">Direito Administrativo, Civil e Tributário com Ricardo Andrade; Direito Penal e Previdenciário com Jefferson Victor. Em casos que cruzam mais de uma área, os dois sócios atuam juntos — com atendimento online para todo o Brasil.</p>
 </div></div></section>
-<section class="secao secao-clara"><div class="wrap"><div class="areas">{cards}</div></div></section>
+<section class="secao secao-clara"><div class="wrap"><div class="areas" data-trilho>{cards}</div>{trilho_nav()}</div></section>
 {online_secao(titulo="Todas as áreas, com atendimento online")}
 {cta()}
 '''

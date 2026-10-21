@@ -52,6 +52,28 @@
     setInterval(function () { if (getComputedStyle(pontos).display === "none" || pausado) return; ir((atual + 1) % itens.length); }, 6000);
   });
 
+  /* Fileiras que rolam lateralmente (desktop/tablet): setas, barra de progresso e teclado */
+  document.querySelectorAll("[data-trilho]").forEach(function (t) {
+    var nav = t.nextElementSibling;
+    if (!nav || !nav.classList.contains("trilho-nav")) return;
+    var barra = nav.querySelector(".trilho-barra i"), ant = nav.querySelector("[data-ant]"), prox = nav.querySelector("[data-prox]");
+    function passo() { var f = t.firstElementChild; return f ? f.getBoundingClientRect().width + 20 : t.clientWidth; }
+    function atualizar() {
+      var max = t.scrollWidth - t.clientWidth;
+      if (max <= 2) { nav.style.display = "none"; return; }
+      nav.style.display = "";
+      barra.style.width = (t.clientWidth / t.scrollWidth * 100) + "%";
+      barra.style.transform = "translateX(" + (t.scrollLeft / t.clientWidth * 100) + "%)";
+      ant.disabled = t.scrollLeft < 2;
+      prox.disabled = t.scrollLeft >= max - 2;
+    }
+    ant.addEventListener("click", function () { t.scrollBy({ left: -passo(), behavior: "smooth" }); });
+    prox.addEventListener("click", function () { t.scrollBy({ left: passo(), behavior: "smooth" }); });
+    t.addEventListener("scroll", atualizar, { passive: true });
+    window.addEventListener("resize", atualizar);
+    atualizar();
+  });
+
   /* Slideshow do hero (celular): rola sozinho, pontos sincronizados, pausa ao tocar */
   document.querySelectorAll("[data-slides]").forEach(function (s) {
     var trilho = s.querySelector(".hero-slides-trilho"), pontos = s.querySelector(".hero-slides-pontos");
