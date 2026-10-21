@@ -57,9 +57,9 @@ SOCIOS = {
         "oab": "OAB/BA 57064",
         "cel": "(75) 99864-9163",
         "whats": "5575998649163",
-        "areas": ["tributario", "administrativo"],
-        "foco": "Direito Tributário e Direito Administrativo",
-        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Tributário, Direito Administrativo e Direito Criminal, com atuação em tribunais superiores.",
+        "areas": ["administrativo", "tributario"],
+        "foco": "Direito Administrativo e Direito Tributário",
+        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Administrativo, Direito Criminal e Direito Tributário, com atuação em tribunais superiores.",
         "bio": [
             "Ricardo Andrade é advogado há dez anos, com atuação concentrada no Direito Tributário e no Direito Administrativo — áreas em que uniu a formação acadêmica à prática diária na gestão pública.",
             "Foi Procurador Municipal por oito anos, contribuindo com a gestão pública e a defesa dos interesses municipais. Essa experiência dá ao escritório conhecimento de dentro sobre licitações, contratos, servidores, tributos municipais e processos administrativos.",
@@ -68,7 +68,7 @@ SOCIOS = {
         "credenciais": [
             "10 anos de experiência como advogado",
             "Procurador Municipal por 8 anos",
-            "Pós-graduado em Direito Tributário, Administrativo e Criminal",
+            "Pós-graduado em Direito Administrativo, Criminal e Tributário",
             "Atuação em tribunais superiores",
         ],
     },
@@ -76,6 +76,13 @@ SOCIOS = {
 
 # Áreas de atuação: (slug, ícone, nome, nome curto, responsável, resumo, lista de atuação, hero lead, faq)
 AREAS = [
+    ("administrativo", "predio", "Direito Administrativo", "Administrativo", "ricardo",
+     "Servidores públicos, concursos, licitações, contratos e processos administrativos, com atuação em Mandado de Segurança.",
+     ["Servidores públicos: direitos, nomeações e processos disciplinares", "Concursos públicos e eliminações indevidas", "Licitações e contratos administrativos", "Improbidade administrativa e Tribunal de Contas", "Mandado de Segurança contra atos do poder público"],
+     "Oito anos como Procurador Municipal deram ao escritório a visão de dentro da administração pública — o que faz diferença ao defender servidores, candidatos, empresas e gestores.",
+     [("Fui eliminado de um concurso. Posso recorrer?", "Sim, pela via administrativa e, se for o caso, judicial — inclusive com Mandado de Segurança quando houver ilegalidade evidente."),
+      ("Atendem prefeituras e gestores?", "Sim, com consultoria e defesa em licitações, contratos, Tribunal de Contas e improbidade administrativa."),
+      ("O que é Mandado de Segurança?", "É a ação rápida para proteger direito líquido e certo violado por autoridade pública. Tem prazo de 120 dias — não deixe para depois.")]),
     ("penal", "balanca", "Direito Penal", "Penal", "jefferson",
      "Defesa técnica em inquéritos, processos criminais e execução penal, com atuação em Habeas Corpus e recursos.",
      ["Defesa em inquéritos policiais e ações penais", "Audiências de custódia e pedidos de liberdade", "Habeas Corpus e recursos aos tribunais", "Execução penal: progressão, remição e livramento", "Tribunal do Júri e crimes contra a vida"],
@@ -97,13 +104,6 @@ AREAS = [
      [("Recebi uma execução fiscal. Posso me defender?", "Sim. Há prazos curtos para embargos ou exceção de pré-executividade; procure orientação assim que for citado."),
       ("Vocês atendem empresas e produtores rurais?", "Sim, pessoas físicas e jurídicas, inclusive produtores rurais e comerciantes."),
       ("É possível recuperar tributos pagos indevidamente?", "Em muitos casos, sim, dentro do prazo legal. Fazemos o levantamento e orientamos sobre restituição ou compensação.")]),
-    ("administrativo", "predio", "Direito Administrativo", "Administrativo", "ricardo",
-     "Servidores públicos, concursos, licitações, contratos e processos administrativos, com atuação em Mandado de Segurança.",
-     ["Servidores públicos: direitos, nomeações e processos disciplinares", "Concursos públicos e eliminações indevidas", "Licitações e contratos administrativos", "Improbidade administrativa e Tribunal de Contas", "Mandado de Segurança contra atos do poder público"],
-     "Oito anos como Procurador Municipal deram ao escritório a visão de dentro da administração pública — o que faz diferença ao defender servidores, candidatos, empresas e gestores.",
-     [("Fui eliminado de um concurso. Posso recorrer?", "Sim, pela via administrativa e, se for o caso, judicial — inclusive com Mandado de Segurança quando houver ilegalidade evidente."),
-      ("Atendem prefeituras e gestores?", "Sim, com consultoria e defesa em licitações, contratos, Tribunal de Contas e improbidade administrativa."),
-      ("O que é Mandado de Segurança?", "É a ação rápida para proteger direito líquido e certo violado por autoridade pública. Tem prazo de 120 dias — não deixe para depois.")]),
 ]
 AREA = {a[0]: a for a in AREAS}
 
@@ -246,7 +246,7 @@ def rodape():
     <div class="rodape-grade">
       <div class="rodape-marca">
         <a class="logo" href="{url("index")}" aria-label="{NOME}">{logo_img(True)}</a>
-        <p>Advocacia nas áreas penal, previdenciária, tributária e administrativa. Direito claro, acessível e humano.</p>
+        <p>Advocacia nas áreas administrativa, penal, previdenciária e tributária. Direito claro, acessível e humano.</p>
         <div class="sociais"><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">{I["insta"]} @andradevictoradv</a></div>
       </div>
       <div>
@@ -293,7 +293,7 @@ def schema(slug, titulo, descricao):
         "url": SITE,
         "image": f"{SITE}/assets/img/og.jpg",
         "logo": f"{SITE}/assets/img/logo-av.png",
-        "description": "Escritório de advocacia: Direito Penal, Previdenciário, Tributário e Administrativo.",
+        "description": "Escritório de advocacia: Direito Administrativo, Penal, Previdenciário e Tributário.",
         "telephone": "+55 75 99864-9163",
         "address": {"@type": "PostalAddress", "streetAddress": "Rua Conselheiro Dantas, 488, Centro", "addressLocality": "Amargosa", "addressRegion": "BA", "postalCode": "45300-000", "addressCountry": "BR"},
         "openingHoursSpecification": [{"@type": "OpeningHoursSpecification", "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], "opens": "09:00", "closes": "17:00"}],
@@ -474,7 +474,7 @@ def home():
   <div class="hero-dupla" aria-label="Os sócios">
     <div class="moldura">{foto("socios-dupla", "Dr. Ricardo Andrade e Dr. Jefferson Victor, sócios do escritório", prioridade=True, sizes="100vw")}</div>
     <div class="hero-dupla-nomes">
-      <a href="{url("socios")}#ricardo"><b>{r["tratamento"]}</b><small>Tributário · Administrativo</small></a>
+      <a href="{url("socios")}#ricardo"><b>{r["tratamento"]}</b><small>Administrativo · Tributário</small></a>
       <a href="{url("socios")}#jefferson"><b>{j["tratamento"]}</b><small>Penal · Previdenciário</small></a>
     </div>
   </div>
@@ -482,7 +482,7 @@ def home():
     <div class="hero-copy">
       <span class="eyebrow">Advogados associados</span>
       <h1 class="hero-titulo">Direito claro, acessível e <em>humano</em>.</h1>
-      <p class="hero-lead">Há quase dez anos, Jefferson Victor e Ricardo Andrade atuam com estratégia, técnica e compromisso nas áreas penal, previdenciária, tributária e administrativa — do primeiro atendimento aos tribunais superiores.</p>
+      <p class="hero-lead">Há quase dez anos, Jefferson Victor e Ricardo Andrade atuam com estratégia, técnica e compromisso nas áreas administrativa, penal, previdenciária e tributária — do primeiro atendimento aos tribunais superiores.</p>
       <div class="hero-acoes">{btn_whats("Falar com um advogado", grande=True)}<a class="btn btn-contorno btn-grande" href="{url("areas")}">Áreas de atuação {I["arrow"]}</a></div>
       <ul class="hero-provas">
         <li>{I["check"]}<span><b>Quase 10 anos</b> de atuação</span></li>
@@ -549,7 +549,7 @@ def areas_pg():
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
   <span class="eyebrow">Áreas de atuação</span>
   <h1 class="hero-titulo">Quatro áreas, um sócio responsável</h1>
-  <p class="hero-lead">Direito Penal e Previdenciário com Jefferson Victor; Direito Tributário e Administrativo com Ricardo Andrade. Em casos que cruzam mais de uma área, os dois sócios atuam juntos.</p>
+  <p class="hero-lead">Direito Administrativo e Tributário com Ricardo Andrade; Direito Penal e Previdenciário com Jefferson Victor. Em casos que cruzam mais de uma área, os dois sócios atuam juntos.</p>
 </div></div></section>
 <section class="secao secao-clara"><div class="wrap"><div class="areas">{cards}</div></div></section>
 {cta()}
@@ -625,7 +625,7 @@ def escritorio_pg():
     ]
     cards = "".join(f'<article class="card revela"><span class="icone">{I[ic]}</span><h3>{t}</h3><p>{d}</p></article>' for ic, t, d in valores)
     return f'''
-{hero_interno("O escritório", "Advocacia com ética, técnica e empatia", "Andrade e Victor Advogados Associados nasceu da parceria entre dois advogados com quase dez anos de estrada, formação complementar e um mesmo jeito de trabalhar: direito claro, acessível e humano.", "escritorio-jefferson", "Jefferson Victor em atendimento no escritório", itens=["Atendimento presencial, pelo WhatsApp e por videochamada", "Áreas penal, previdenciária, tributária e administrativa", "Atuação em todas as instâncias, inclusive tribunais superiores"], pos="center 20%", ar="4 / 4.4")}
+{hero_interno("O escritório", "Advocacia com ética, técnica e empatia", "Andrade e Victor Advogados Associados nasceu da parceria entre dois advogados com quase dez anos de estrada, formação complementar e um mesmo jeito de trabalhar: direito claro, acessível e humano.", "escritorio-jefferson", "Jefferson Victor em atendimento no escritório", itens=["Atendimento presencial, pelo WhatsApp e por videochamada", "Áreas administrativa, penal, previdenciária e tributária", "Atuação em todas as instâncias, inclusive tribunais superiores"], pos="center 20%", ar="4 / 4.4")}
 <section class="secao secao-clara"><div class="wrap">
   {secao_titulo("Nossos valores", "O que orienta cada caso", centro=True)}
   <div class="grade-4">{cards}</div>
@@ -702,8 +702,8 @@ def pagina_404():
 
 
 PAGINAS = {
-    "index": ("Andrade e Victor Advogados Associados", "Escritório de advocacia: Direito Penal, Previdenciário, Tributário e Administrativo. Direito claro, acessível e humano.", home),
-    "areas": ("Áreas de atuação · Andrade e Victor Advogados", "Direito Penal, Previdenciário, Tributário e Administrativo, com sócio responsável por área.", areas_pg),
+    "index": ("Andrade e Victor Advogados Associados", "Escritório de advocacia: Direito Administrativo, Penal, Previdenciário e Tributário. Direito claro, acessível e humano.", home),
+    "areas": ("Áreas de atuação · Andrade e Victor Advogados", "Direito Administrativo, Penal, Previdenciário e Tributário, com sócio responsável por área.", areas_pg),
     "socios": ("Sócios · Jefferson Victor e Ricardo Andrade", "Conheça os advogados Jefferson Victor e Ricardo Andrade: formação, experiência e áreas de atuação.", socios_pg),
     "escritorio": ("O escritório · Andrade e Victor Advogados", "Advocacia com ética, técnica e empatia. Conheça a história e os valores do escritório.", escritorio_pg),
     "contato": ("Contato · Andrade e Victor Advogados", "Fale com o escritório Andrade e Victor: WhatsApp dos sócios, endereço, horário e formulário.", contato_pg),
