@@ -60,6 +60,8 @@ SOCIOS = {
         "oab": "OAB/BA 57.064",
         "cel": "(75) 99864-9163",
         "whats": "5575998649163",
+        "instagram": "https://www.instagram.com/advrsandrade/",
+        "insta_user": "@advrsandrade",
         "areas": ["administrativo", "civil", "tributario"],
         "foco": "Direito Administrativo, Civil e Tributário",
         "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Administrativo, Direito Criminal e Direito Tributário, com atuação em tribunais superiores e atendimento online para todo o Brasil.",
@@ -270,7 +272,7 @@ def rodape():
       <div class="rodape-marca">
         <a class="logo" href="{url("index")}" aria-label="{NOME}">{logo_img(True)}</a>
         <p>Advocacia nas áreas administrativa, civil, penal, previdenciária e tributária. Atendimento online para todo o Brasil e presencial no escritório. Direito claro, acessível e humano.</p>
-        <div class="sociais"><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">{I["insta"]} @andradevictoradv</a><a href="{j["instagram"]}" target="_blank" rel="noopener noreferrer">{I["insta"]} {j["insta_user"]} · Jefferson</a></div>
+        <div class="sociais"><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">{I["insta"]} @andradevictoradv</a><a href="{r["instagram"]}" target="_blank" rel="noopener noreferrer">{I["insta"]} {r["insta_user"]} · Ricardo</a><a href="{j["instagram"]}" target="_blank" rel="noopener noreferrer">{I["insta"]} {j["insta_user"]} · Jefferson</a></div>
       </div>
       <div>
         <h4>Áreas de atuação</h4>
@@ -751,47 +753,35 @@ def escritorio_pg():
 
 
 def cartao_contato(k):
-    """Cartão de contato direto de um sócio: foto, nome, OAB, áreas e botões (WhatsApp, ligar, Instagram)."""
+    """Cartão de contato de um sócio (opção A aprovada): foto + nome/OAB/áreas, linhas iguais (WhatsApp, Instagram, e-mail) e botões na mesma posição."""
     s = SOCIOS[k]
-    redes = f'<a class="btn btn-contorno-escuro" href="{s["instagram"]}" target="_blank" rel="noopener noreferrer">{I["insta"]}<span>{s["insta_user"]}</span></a>' if s.get("instagram") else ""
+    def linha(ic, txt):
+        return f'<div>{I[ic]}<span>{txt}</span></div>'
     return f'''<article class="contato-socio revela" id="contato-{k}">
-  <div class="contato-socio-foto"><div class="moldura">{foto(f"socio-{k}", s["tratamento"] + ", advogado", sizes="(max-width: 640px) 100vw, 200px")}</div></div>
-  <div class="contato-socio-txt">
-    <span class="eyebrow">{s["cargo"]} · {s["oab"]}</span>
-    <h3>{s["tratamento"]}</h3>
-    <p class="socio-foco">{s["foco"]}</p>
-    <p class="contato-socio-num">{I["whats"]}<span>{s["cel"]}</span></p>
-    <div class="contato-socio-acoes">{btn_whats("WhatsApp", "btn btn-dourado", f"Olá, {s['tratamento']}! Vim pelo site do escritório e gostaria de uma orientação.", k)}<a class="btn btn-contorno-escuro" href="{tel(s["cel"])}">{I["phone"]}<span>Ligar</span></a>{redes}</div>
-  </div>
+  <div class="contato-socio-topo"><div class="moldura">{foto(f"socio-{k}", s["tratamento"] + ", advogado", sizes="140px")}</div>
+    <div class="contato-socio-cab"><span class="eyebrow">{s["cargo"]} · {s["oab"]}</span><h3>{s["tratamento"]}</h3><p class="socio-foco">{s["foco"]}</p></div></div>
+  <div class="contato-socio-linhas">{linha("whats", f'<a href="{wa(None, k)}" target="_blank" rel="noopener noreferrer">{s["cel"]}</a> · WhatsApp')}{linha("insta", f'<a href="{s["instagram"]}" target="_blank" rel="noopener noreferrer">{s["insta_user"]}</a> · Instagram')}{linha("mail", f'<a href="mailto:{EMAIL}">{EMAIL}</a>')}</div>
+  <div class="contato-socio-acoes">{btn_whats("Falar no WhatsApp", "btn btn-dourado", msg_socio(k), k)}<a class="btn btn-contorno-escuro" href="{tel(s["cel"])}">{I["phone"]}<span>Ligar</span></a><a class="btn btn-contorno-escuro" href="{s["instagram"]}" target="_blank" rel="noopener noreferrer">{I["insta"]}<span>{s["insta_user"]}</span></a></div>
 </article>'''
 
 
 def contato_pg():
-    r, j = SOCIOS["ricardo"], SOCIOS["jefferson"]
     return f'''
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
   <span class="eyebrow">Contato</span>
   <h1 class="hero-titulo">Fale com o escritório</h1>
   <p class="hero-lead">Atendimento online para todo o Brasil pelo WhatsApp de cada sócio, por videochamada ou pelas redes sociais — e presencial, com hora marcada, no escritório. Respondemos em horário comercial.</p>
 </div></div></section>
-<section class="secao secao-clara"><div class="wrap contato-grade">
-  <div class="contato-info revela">
-    <h2>Escritório e atendimento online</h2>
-    <ul class="lista-contato grande">
-      <li>{I["video"]}<span><b>{ONLINE}</b><br>Videochamada, WhatsApp e documentos digitais</span></li>
-      <li>{I["map"]}<span><b>Endereço</b><br>{ENDERECO}<br>{CIDADE}</span></li>
-      <li>{I["clock"]}<span><b>Horário</b><br>{HORARIO}</span></li>
-      <li>{I["mail"]}<span><b>E-mail</b><br><a href="mailto:{EMAIL}">{EMAIL}</a></span></li>
-      <li>{I["insta"]}<span><b>Instagram</b><br><a href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">@andradevictoradv</a> · escritório<br><a href="{j["instagram"]}" target="_blank" rel="noopener noreferrer">{j["insta_user"]}</a> · Dr. Jefferson Victor</span></li>
-    </ul>
-    <div class="contato-acoes"><a class="btn btn-dourado" href="{MAPS}" target="_blank" rel="noopener noreferrer">{I["map"]}<span>Como chegar</span></a><a class="btn btn-contorno-escuro" href="mailto:{EMAIL}">{I["mail"]}<span>Enviar e-mail</span></a></div>
+<section class="secao secao-clara"><div class="wrap">
+  {secao_titulo("Contato direto", "Fale com o advogado", "Escolha o sócio responsável pela sua área: WhatsApp, ligação, Instagram ou e-mail.", centro=True)}
+  <div class="contato-socios">{cartao_contato("ricardo")}{cartao_contato("jefferson")}</div>
+  <div class="contato-faixa revela">
+    <div>{I["video"]}<div><b>Atendimento online</b><span>Todo o Brasil · videochamada, WhatsApp e documentos digitais</span></div></div>
+    <div>{I["map"]}<div><b>Endereço</b><span>{ENDERECO}<br>{CIDADE}</span></div></div>
+    <div>{I["clock"]}<div><b>Horário</b><span>{HORARIO}</span></div></div>
+    <div>{I["mail"]}<div><b>E-mail</b><span><a href="mailto:{EMAIL}">{EMAIL}</a></span></div></div>
   </div>
-  <div class="contato-direto">
-    <div class="revela"><span class="eyebrow">Contato direto</span><h2>Fale com o advogado</h2><p>Escolha o sócio responsável pela sua área e chame no WhatsApp, ligue ou acompanhe nas redes.</p></div>
-    {cartao_contato("ricardo")}
-    {cartao_contato("jefferson")}
-    <p class="contato-direto-nota revela">{I["mail"]}<span>Um e-mail para os dois sócios: <a href="mailto:{EMAIL}">{EMAIL}</a></span></p>
-  </div>
+  <div class="contato-acoes contato-acoes-centro revela"><a class="btn btn-dourado" href="{MAPS}" target="_blank" rel="noopener noreferrer">{I["map"]}<span>Como chegar</span></a><a class="btn btn-contorno-escuro" href="{INSTAGRAM}" target="_blank" rel="noopener noreferrer">{I["insta"]}<span>@andradevictoradv</span></a></div>
 </div></section>
 {online_secao(titulo="Como funciona o atendimento online")}
 '''
