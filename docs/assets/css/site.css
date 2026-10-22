@@ -357,6 +357,24 @@ em { font-style: italic; color: var(--dourado-2); font-weight: inherit; }
 .contato-info, .lista-contato li span { min-width: 0; overflow-wrap: anywhere; }
 .contato-acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
 .contato-form { background: #fff; border: 1px solid var(--linha-clara); border-top: 3px solid var(--dourado); padding: 36px; }
+/* Contato direto: cartões dos sócios (foto + nome + OAB + áreas + WhatsApp / ligar / Instagram) */
+.contato-direto { display: grid; gap: 18px; }
+.contato-direto > div:first-child p { color: var(--texto-2); margin: 0; }
+.contato-direto h2 { margin-bottom: 8px; }
+.contato-socio { display: grid; grid-template-columns: 160px minmax(0, 1fr); gap: 22px; align-items: center; background: #fff; border: 1px solid var(--linha-clara); border-top: 3px solid var(--dourado); padding: 22px; box-shadow: var(--sombra-clara); }
+.contato-socio-foto .moldura { aspect-ratio: 1; overflow: hidden; }
+.contato-socio-foto img { width: 100%; height: 100%; object-fit: cover; object-position: center 20%; }
+.contato-socio-txt { min-width: 0; }
+.contato-socio-txt .eyebrow { margin-bottom: 4px; }
+.contato-socio-txt h3 { font-size: 1.7rem; margin-bottom: 2px; }
+.contato-socio-txt .socio-foco { color: var(--dourado-escuro); font-weight: 700; font-size: .82rem; letter-spacing: .04em; text-transform: uppercase; margin: 0 0 8px; }
+.contato-socio-num { display: inline-flex; align-items: center; gap: 8px; color: var(--texto); font-weight: 700; margin: 0 0 14px; }
+.contato-socio-num svg { width: 20px; height: 20px; color: var(--whats-escuro); }
+.contato-socio-acoes { display: flex; flex-wrap: wrap; gap: 10px; }
+.contato-socio-acoes .btn { padding: 11px 14px; font-size: .84rem; min-width: 0; white-space: nowrap; }
+.contato-direto-nota { display: flex; align-items: center; gap: 10px; color: var(--texto-2); margin: 4px 0 0; font-size: .95rem; }
+.contato-direto-nota svg { width: 20px; height: 20px; color: var(--dourado-escuro); flex: 0 0 20px; }
+.contato-direto-nota span { min-width: 0; overflow-wrap: anywhere; }
 .contato-form > p { color: var(--texto-2); }
 .form-grade { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .form label { display: grid; gap: 6px; font-weight: 600; font-size: .88rem; color: var(--texto-2); }
@@ -499,6 +517,13 @@ em { font-style: italic; color: var(--dourado-2); font-weight: inherit; }
   .numero strong { font-size: 2.6rem; }
   .form-grade { grid-template-columns: 1fr; }
   .contato-form { padding: 24px 20px; }
+  .contato-socio { grid-template-columns: 1fr; gap: 16px; padding: 16px; }
+  .contato-socio-foto { max-width: 220px; margin-inline: auto; width: 100%; }
+  .contato-socio-txt { text-align: center; }
+  .contato-socio-txt .socio-foco { display: block; }
+  .contato-socio-txt .eyebrow { justify-content: center; }
+  .contato-socio-acoes { justify-content: center; }
+  .contato-socio-acoes .btn-dourado { width: 100%; justify-content: center; }
   .form-acoes .btn { width: 100%; white-space: normal; }
   .rodape-grade { grid-template-columns: 1fr; gap: 28px; }
   .hero-provas { gap: 8px 16px; font-size: .88rem; }
