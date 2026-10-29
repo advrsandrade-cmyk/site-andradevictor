@@ -64,16 +64,17 @@ SOCIOS = {
         "insta_user": "@advrsandrade",
         "areas": ["administrativo", "civil", "tributario"],
         "foco": "Direito Administrativo, Civil e Tributário",
-        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Administrativo, Direito Criminal e Direito Tributário, com atuação em tribunais superiores e atendimento online para todo o Brasil.",
+        "resumo": "Dez anos de advocacia e oito anos como Procurador Municipal. Pós-graduado em Direito Tributário pela PUC-SP, além de Direito Administrativo e Direito Criminal, com atuação em tribunais superiores e atendimento online para todo o Brasil.",
         "bio": [
             "Ricardo Andrade é advogado há dez anos, com atuação concentrada no Direito Tributário, no Direito Administrativo e no Direito Civil — áreas em que uniu a formação acadêmica à prática diária na gestão pública e no atendimento a pessoas e empresas.",
             "Foi Procurador Municipal por oito anos, contribuindo com a gestão pública e a defesa dos interesses municipais. Essa experiência dá ao escritório conhecimento de dentro sobre licitações, contratos, servidores, tributos municipais e processos administrativos.",
-            "É pós-graduado em Direito Tributário pelo Instituto Brasileiro de Direito, em Direito Administrativo pela Escola Brasileira de Direito e em Direito Criminal pela PUC Minas. Além da advocacia privada, tem vasta atuação em tribunais superiores.",
+            "É pós-graduado em Direito Tributário pela Pontifícia Universidade Católica de São Paulo (PUC-SP) e pelo Instituto Brasileiro de Direito, em Direito Administrativo pela Escola Brasileira de Direito e em Direito Criminal pela PUC Minas. Além da advocacia privada, tem vasta atuação em tribunais superiores.",
         ],
         "credenciais": [
             "10 anos de experiência como advogado",
             "Procurador Municipal por 8 anos",
-            "Pós-graduado em Direito Administrativo, Criminal e Tributário",
+            "Pós-graduado em Direito Tributário pela PUC-SP",
+            "Pós-graduado em Direito Administrativo e em Direito Criminal",
             "Atuação em tribunais superiores",
         ],
     },
@@ -542,7 +543,7 @@ def online_secao(escura=True, titulo="Advogados online para todo o Brasil"):
 
 
 def numeros():
-    itens = [("10", "anos de advocacia", "Quase uma década de atuação dos sócios"), ("4", "pós-graduações", "PUC Minas, Escola Brasileira de Direito e Instituto Brasileiro de Direito"), ("8", "anos de Procuradoria", "Experiência de Ricardo Andrade na gestão pública municipal"), ("2", "sócios à frente", "Atendimento direto, sem intermediários")]
+    itens = [("10", "anos de advocacia", "Quase uma década de atuação dos sócios"), ("5", "pós-graduações", "PUC-SP, PUC Minas, Escola Brasileira de Direito e Instituto Brasileiro de Direito"), ("8", "anos de Procuradoria", "Experiência de Ricardo Andrade na gestão pública municipal"), ("2", "sócios à frente", "Atendimento direto, sem intermediários")]
     return '<div class="numeros">' + "".join(f'<div class="numero revela"><strong>{n}</strong><span>{t}</span><small>{d}</small></div>' for n, t, d in itens) + "</div>"
 
 
@@ -577,12 +578,12 @@ def home():
     </div>
     <div class="hero-dupla-numeros" aria-label="Números do escritório">
       <div><strong>10</strong><span>anos de advocacia</span></div>
-      <div><strong>4</strong><span>pós-graduações</span></div>
+      <div><strong>5</strong><span>pós-graduações</span></div>
       <div><strong>8</strong><span>anos na Procuradoria Municipal</span></div>
     </div>
     <ul class="hero-dupla-cred">
       <li>{I["check"]}<span><b>Jefferson</b> — ex-Juiz Leigo e Conciliador do TJBA, pós em Ciências Criminais (PUC Minas)</span></li>
-      <li>{I["check"]}<span><b>Ricardo</b> — OAB/BA 57.064, ex-Procurador Municipal, atuação em tribunais superiores</span></li>
+      <li>{I["check"]}<span><b>Ricardo</b> — OAB/BA 57.064, pós em Direito Tributário (PUC-SP), ex-Procurador Municipal</span></li>
     </ul>
   </div>
   <div class="wrap">
@@ -743,7 +744,7 @@ def escritorio_pg():
   <div class="grade-4">{cards}</div>
 </div></section>
 {online_secao(titulo="Como funciona o atendimento online")}
-{dupla("hero-ricardo", "Ricardo Andrade, advogado", "Trajetória", "Do Judiciário e da gestão pública para a sua defesa", "Jefferson Victor foi Juiz Leigo e Conciliador do TJBA; Ricardo Andrade foi Procurador Municipal por oito anos. Essa vivência dos dois lados do balcão — decidindo e defendendo o interesse público — hoje se traduz em estratégia e técnica a serviço de quem procura o escritório, de qualquer lugar do Brasil.", ["Quase dez anos de advocacia", "Quatro pós-graduações entre os sócios", "Atuação em tribunais superiores"], invertida=True, link=url("socios"), link_txt="Conhecer os sócios", pos="center 20%", escura=False, ar="4 / 5", ar_m="4 / 4.2")}
+{dupla("hero-ricardo", "Ricardo Andrade, advogado", "Trajetória", "Do Judiciário e da gestão pública para a sua defesa", "Jefferson Victor foi Juiz Leigo e Conciliador do TJBA; Ricardo Andrade foi Procurador Municipal por oito anos. Essa vivência dos dois lados do balcão — decidindo e defendendo o interesse público — hoje se traduz em estratégia e técnica a serviço de quem procura o escritório, de qualquer lugar do Brasil.", ["Quase dez anos de advocacia", "Cinco pós-graduações entre os sócios", "Atuação em tribunais superiores"], invertida=True, link=url("socios"), link_txt="Conhecer os sócios", pos="center 20%", escura=False, ar="4 / 5", ar_m="4 / 4.2")}
 <section class="secao secao-clara"><div class="wrap">
   {secao_titulo("Em números", "Experiência que se traduz em segurança", centro=True)}
   {numeros()}
