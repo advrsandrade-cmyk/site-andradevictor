@@ -1,0 +1,19 @@
+# API do painel do blog — Andrade e Victor (Cloudflare Worker)
+name = "painel-andradevictor"
+main = "worker.js"
+compatibility_date = "2025-10-01"
+workers_dev = true
+
+[vars]
+GITHUB_REPO = "advrsandrade-cmyk/site-andradevictor"
+BRANCH = "main"
+SITE_ORIGIN = "https://andradevictoradvogados.com.br"
+MAIL_FROM = "Painel Andrade e Victor <painel@nexusdigitalgroup.com.br>"
+MAIL_REPLY = "andradevictoradvogados@gmail.com"
+
+[[kv_namespaces]]
+binding = "PAINEL"
+id = "5bbc7db1ed31490db272bb1a906124aa"          # criado com: npx wrangler kv namespace create PAINEL
+preview_id = "5bbc7db1ed31490db272bb1a906124aa"
+
+# Segredos (nunca no arquivo): npx wrangler secret put GITHUB_TOKEN | JWT_SECRET | RESEND_API_KEY

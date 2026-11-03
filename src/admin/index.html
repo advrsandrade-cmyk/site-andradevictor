@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
+<meta name="api" content="https://painel-andradevictor.nexusdigitalgrp.workers.dev">
 <title>Painel do blog · Andrade e Victor</title>
 <link rel="icon" href="../assets/img/icone-av-64.png" type="image/png">
 <style>
@@ -106,7 +107,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
 <header class="topo">
   <span class="marca">Andrade <b>&amp;</b> Victor</span>
   <span class="url">Painel do blog</span>
-  <span class="dir"><span class="st" id="stConexao"><i></i> Sem conexão com o site</span><button class="btn esc" type="button" id="btnConfig">Configurar</button></span>
+  <span class="dir"><span class="st" id="stConexao"><i></i> Entrando…</span><button class="btn esc" type="button" id="btnUsuarios" hidden>Usuários</button><button class="btn esc" type="button" id="btnConta" hidden>Minha conta</button><button class="btn esc" type="button" id="btnSair" hidden>Sair</button></span>
 </header>
 
 <div class="app">
@@ -114,7 +115,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     <h4>Artigos</h4>
     <button class="btn ouro novo" type="button" id="btnNovo">+ Novo artigo</button>
     <div id="itens"></div>
-    <div class="config"><small style="color:#8d8b84">Os artigos são lidos do site publicado. Para publicar ou editar, configure a conexão com o GitHub (botão "Configurar").</small></div>
+    <div class="config"><small style="color:#8d8b84">Ao salvar, o site é regerado e publicado em 1 a 3 minutos.</small></div>
   </nav>
 
   <main class="form">
@@ -161,13 +162,63 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
   </aside>
 </div>
 
-<div class="modal" id="modal"><div class="caixa">
-  <h2>Conexão com o site</h2>
-  <p>O painel grava os artigos direto no repositório do site (GitHub). Cole aqui um token de acesso com permissão de escrita no repositório. Ele fica salvo só neste navegador.</p>
-  <div class="campo"><label for="cfgRepo">Repositório</label><input id="cfgRepo" placeholder="usuario/repositorio"></div>
-  <div class="campo"><label for="cfgBranch">Branch</label><input id="cfgBranch" placeholder="main"></div>
-  <div class="campo"><label for="cfgToken">Token de acesso (GitHub)</label><input id="cfgToken" type="password" autocomplete="off" placeholder="cole o token aqui"><small>Crie em GitHub → Settings → Developer settings → Fine-grained tokens, só para este repositório, com "Contents: Read and write".</small></div>
-  <div class="acoes"><button class="btn ouro" type="button" id="cfgSalvar">Salvar</button><button class="btn" type="button" id="cfgFechar">Cancelar</button><button class="btn" type="button" id="cfgLimpar">Esquecer token</button></div>
+<div class="modal aberto" id="mLogin"><div class="caixa">
+  <h2>Entrar no painel</h2>
+  <p>Use o login e a senha do seu usuário. Esqueceu? Peça um link de redefinição pelo e-mail cadastrado.</p>
+  <form id="fLogin" autocomplete="on">
+    <div class="campo"><label for="lgLogin">Login ou e-mail</label><input id="lgLogin" name="username" autocomplete="username" autocapitalize="none"></div>
+    <div class="campo"><label for="lgSenha">Senha</label><input id="lgSenha" name="password" type="password" autocomplete="current-password"></div>
+    <p class="status" id="lgStatus"></p>
+    <div class="acoes"><button class="btn ouro" type="submit">Entrar</button><button class="btn" type="button" id="lgEsqueci">Esqueci a senha</button></div>
+  </form>
+</div></div>
+
+<div class="modal" id="mRecuperar"><div class="caixa">
+  <h2>Recuperar senha</h2>
+  <p>Informe seu login ou e-mail. Enviaremos um link para definir uma nova senha (vale por 72 horas).</p>
+  <div class="campo"><label for="rcLogin">Login ou e-mail</label><input id="rcLogin" autocapitalize="none"></div>
+  <p class="status" id="rcStatus"></p>
+  <div class="acoes"><button class="btn ouro" type="button" id="rcEnviar">Enviar link</button><button class="btn" type="button" id="rcVoltar">Voltar</button></div>
+</div></div>
+
+<div class="modal" id="mRedefinir"><div class="caixa">
+  <h2 id="rdTitulo">Definir senha</h2>
+  <p id="rdTexto">Escolha uma senha com pelo menos 8 caracteres, misturando letras e números.</p>
+  <form id="fRedefinir">
+    <div class="campo"><label for="rdSenha">Nova senha</label><input id="rdSenha" type="password" autocomplete="new-password"></div>
+    <div class="campo"><label for="rdSenha2">Repita a senha</label><input id="rdSenha2" type="password" autocomplete="new-password"></div>
+    <p class="status" id="rdStatus"></p>
+    <div class="acoes"><button class="btn ouro" type="submit">Salvar senha e entrar</button></div>
+  </form>
+</div></div>
+
+<div class="modal" id="mConta"><div class="caixa">
+  <h2>Minha conta</h2>
+  <p id="ctInfo"></p>
+  <h4 style="margin:0 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Trocar senha</h4>
+  <div class="campo"><label for="ctAtual">Senha atual</label><input id="ctAtual" type="password" autocomplete="current-password"></div>
+  <div class="campo"><label for="ctNova">Nova senha</label><input id="ctNova" type="password" autocomplete="new-password"></div>
+  <div class="acoes"><button class="btn ouro" type="button" id="ctTrocar">Trocar senha</button></div>
+  <h4 style="margin:18px 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">E-mail de recuperação</h4>
+  <div class="campo"><label for="ctEmail">E-mail</label><input id="ctEmail" type="email"></div>
+  <div class="campo"><label for="ctSenhaEmail">Confirme com a senha atual</label><input id="ctSenhaEmail" type="password" autocomplete="current-password"></div>
+  <p class="status" id="ctStatus"></p>
+  <div class="acoes"><button class="btn ouro" type="button" id="ctEmailSalvar">Salvar e-mail</button><button class="btn" type="button" id="ctFechar">Fechar</button></div>
+</div></div>
+
+<div class="modal" id="mUsuarios"><div class="caixa" style="width:min(100%,680px)">
+  <h2>Usuários do painel</h2>
+  <p>Quem pode entrar, escrever e publicar. Um usuário novo recebe por e-mail o link para definir a própria senha.</p>
+  <div id="usLista" style="margin-bottom:14px"></div>
+  <h4 style="margin:0 0 8px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)">Adicionar usuário</h4>
+  <div class="tres">
+    <div class="campo"><label for="usNome">Nome</label><input id="usNome" placeholder="Dr. Fulano"></div>
+    <div class="campo"><label for="usLogin">Login</label><input id="usLogin" placeholder="fulano" autocapitalize="none"></div>
+    <div class="campo"><label for="usPapel">Papel</label><select id="usPapel"><option value="editor">Editor (escreve e publica)</option><option value="admin">Administrador (também gerencia usuários)</option></select></div>
+  </div>
+  <div class="campo"><label for="usEmail">E-mail (recebe o link de senha e a recuperação)</label><input id="usEmail" type="email"></div>
+  <p class="status" id="usStatus"></p>
+  <div class="acoes"><button class="btn ouro" type="button" id="usCriar">Criar e enviar link</button><button class="btn" type="button" id="usFechar">Fechar</button></div>
 </div></div>
 
 <script>
@@ -176,14 +227,20 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
   var AREAS = { tributario: ["Direito Tributário", "ricardo"], previdenciario: ["Direito Previdenciário", "jefferson"], penal: ["Direito Penal", "jefferson"], administrativo: ["Direito Administrativo", "ricardo"], civil: ["Direito Civil", "ricardo"] };
   var AUTORES = { ricardo: "Dr. Ricardo Andrade", jefferson: "Dr. Jefferson Victor" };
   var LINKS = { tributario: 1, previdenciario: 1, penal: 1, administrativo: 1, civil: 1, contato: 1, socios: 1, areas: 1, escritorio: 1, blog: 1 };
-  var posts = [], atual = null, cfg = {};
+  var API = (document.querySelector('meta[name="api"]') || {}).content || "";
+  var posts = [], atual = null, sessao = null, eu = null;
   var naPrevia = location.hostname.indexOf("claudeusercontent") >= 0 || location.hostname.indexOf("claude.ai") >= 0;
   if (naPrevia) $("#avisoPrevia").hidden = false;
-  try { cfg = JSON.parse(localStorage.getItem("av-admin") || "{}"); } catch (e) { cfg = {}; }
-  if (!cfg.repo) cfg.repo = "advrsandrade-cmyk/site-andradevictor";
-  if (!cfg.branch) cfg.branch = "main";
-  function conectado() { return !!cfg.token && !naPrevia; }
-  function estadoConexao() { var el = $("#stConexao"); el.className = "st" + (conectado() ? " on" : ""); el.innerHTML = "<i></i> " + (conectado() ? "Conectado ao site" : "Sem conexão com o site"); }
+  try { sessao = localStorage.getItem("av-sessao") || null; } catch (e) { sessao = null; }
+  function conectado() { return !!sessao && !!eu; }
+  function estadoConexao() { var el = $("#stConexao"); el.className = "st" + (conectado() ? " on" : ""); el.innerHTML = "<i></i> " + (conectado() ? "Conectado como <b>&nbsp;" + esc(eu.nome) + "</b>" : (naPrevia ? "Prévia (sem publicação)" : "Não conectado")); $("#btnSair").hidden = !conectado(); $("#btnConta").hidden = !conectado(); $("#btnUsuarios").hidden = !(conectado() && eu.papel === "admin"); }
+  function api(metodo, rota, corpo) {
+    if (!API) return Promise.reject(new Error("API do painel não configurada."));
+    var h = { "Content-Type": "application/json" }; if (sessao) h.Authorization = "Bearer " + sessao;
+    return fetch(API + rota, { method: metodo, headers: h, body: corpo ? JSON.stringify(corpo) : undefined }).then(function (r) { return r.json().catch(function () { return {}; }).then(function (j) { if (!r.ok) { var e = new Error(j.erro || ("Erro " + r.status)); e.status = r.status; throw e; } return j; }); });
+  }
+  function modal(id, abre) { document.querySelectorAll(".modal").forEach(function (m) { m.classList.remove("aberto"); }); if (abre !== false && id) $(id).classList.add("aberto"); }
+  function msg(id, txt, cls) { var el = $(id); el.className = "status" + (cls ? " " + cls : ""); el.textContent = txt || ""; }
 
   /* ---------- Markdown → HTML (mesmas regras do build.py) ---------- */
   function esc(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
@@ -275,37 +332,81 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     return linhas.join("\n") + "\n\n" + p.md.trim() + "\n";
   }
 
-  /* ---------- GitHub ---------- */
-  function gh(caminho, opts) {
-    opts = opts || {}; opts.headers = { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" };
-    return fetch("https://api.github.com/repos/" + cfg.repo + "/contents/" + caminho + (opts.method === "GET" || !opts.method ? "?ref=" + cfg.branch : ""), opts).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.message || r.status); return j; }); });
-  }
-  function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+  /* ---------- Publicação (via API do painel) ---------- */
   function setStatus(txt, cls) { var el = $("#status"); el.className = "status" + (cls ? " " + cls : ""); el.textContent = txt; }
+  function exigeLogin() { if (naPrevia) { setStatus("Na prévia a publicação não funciona; abra o painel no site publicado.", "erro"); return false; } if (!conectado()) { modal("#mLogin"); return false; } return true; }
   function publicar() {
     var p = ler();
     if (!p.titulo || !p.md) { setStatus("Preencha o título e o texto.", "erro"); return; }
     if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
-    if (!conectado()) { $("#modal").classList.add("aberto"); if (naPrevia) setStatus("Na prévia a publicação não funciona; abra o painel no site publicado.", "erro"); return; }
-    var caminho = "src/blog/" + p.slug + ".md", b = $("#btnPublicar"); b.disabled = true; setStatus("Enviando para o site…");
-    gh(caminho, { method: "GET" }).then(function (j) { return j.sha; }, function () { return null; }).then(function (sha) {
-      var body = { message: (sha ? "Atualiza" : "Novo") + " artigo: " + p.titulo, content: b64(arquivoMd(p)), branch: cfg.branch }; if (sha) body.sha = sha;
-      return gh(caminho, { method: "PUT", body: JSON.stringify(body) });
-    }).then(function () {
+    if (!exigeLogin()) return;
+    var b = $("#btnPublicar"); b.disabled = true; setStatus("Enviando para o site…");
+    api("PUT", "/post", { slug: p.slug, conteudo: arquivoMd(p) }).then(function () {
       setStatus("Enviado. O site é regerado e publicado em 1 a 3 minutos.", "ok"); b.disabled = false;
       var i = posts.findIndex(function (x) { return x.slug === p.slug; }); var reg = { slug: p.slug, titulo: p.titulo, seo_titulo: p.seo_titulo, descricao: p.descricao, area: p.area, autor: p.autor, data: p.data, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq, rascunho: p.situacao === "rascunho" };
       if (i >= 0) posts[i] = reg; else posts.unshift(reg); posts.sort(function (a, c) { return a.data < c.data ? 1 : -1; }); listar(); marcarAtivo(p.slug); $("#btnExcluir").hidden = false;
-    }).catch(function (e) { setStatus("Não foi possível publicar: " + e.message, "erro"); b.disabled = false; });
+    }).catch(function (e) { if (e.status === 401) { sair(true); } setStatus("Não foi possível publicar: " + e.message, "erro"); b.disabled = false; });
   }
   function excluir() {
     var p = ler(); if (!p.slug) return;
-    if (!conectado()) { $("#modal").classList.add("aberto"); return; }
+    if (!exigeLogin()) return;
     var b = $("#btnExcluir"); if (b.dataset.confirma !== "1") { b.dataset.confirma = "1"; b.textContent = "Confirmar exclusão"; setStatus("Clique de novo para excluir de vez.", "erro"); return; }
-    var caminho = "src/blog/" + p.slug + ".md"; b.disabled = true; setStatus("Excluindo…");
-    gh(caminho, { method: "GET" }).then(function (j) { return gh(caminho, { method: "DELETE", body: JSON.stringify({ message: "Exclui artigo: " + p.titulo, sha: j.sha, branch: cfg.branch }) }); })
-      .then(function () { posts = posts.filter(function (x) { return x.slug !== p.slug; }); listar(); novo(); setStatus("Artigo excluído. O site é republicado em 1 a 3 minutos.", "ok"); b.disabled = false; b.dataset.confirma = ""; b.textContent = "Excluir artigo"; })
+    b.disabled = true; setStatus("Excluindo…");
+    api("DELETE", "/post/" + p.slug).then(function () { posts = posts.filter(function (x) { return x.slug !== p.slug; }); listar(); novo(); setStatus("Artigo excluído. O site é republicado em 1 a 3 minutos.", "ok"); b.disabled = false; b.dataset.confirma = ""; b.textContent = "Excluir artigo"; })
       .catch(function (e) { setStatus("Não foi possível excluir: " + e.message, "erro"); b.disabled = false; b.dataset.confirma = ""; b.textContent = "Excluir artigo"; });
   }
+  /* ---------- Sessão ---------- */
+  function entrar(ev) {
+    ev.preventDefault(); msg("#lgStatus", "Entrando…");
+    api("POST", "/entrar", { login: $("#lgLogin").value, senha: $("#lgSenha").value }).then(function (j) {
+      sessao = j.token; eu = j.usuario; try { localStorage.setItem("av-sessao", sessao); } catch (e) {}
+      $("#lgSenha").value = ""; msg("#lgStatus", ""); modal(null, false); estadoConexao();
+    }).catch(function (e) { msg("#lgStatus", e.message, "erro"); });
+  }
+  function sair(expirou) { sessao = null; eu = null; try { localStorage.removeItem("av-sessao"); } catch (e) {} estadoConexao(); if (!naPrevia) { msg("#lgStatus", expirou ? "Sua sessão expirou. Entre de novo." : "", expirou ? "erro" : ""); modal("#mLogin"); } }
+  function recuperar() {
+    var l = $("#rcLogin").value.trim(); if (!l) { msg("#rcStatus", "Informe o login ou o e-mail.", "erro"); return; }
+    msg("#rcStatus", "Enviando…");
+    api("POST", "/recuperar", { login: l }).then(function (j) { msg("#rcStatus", j.mensagem || "Enviado.", "ok"); }).catch(function (e) { msg("#rcStatus", e.message, "erro"); });
+  }
+  function redefinir(ev) {
+    ev.preventDefault(); var s1 = $("#rdSenha").value, s2 = $("#rdSenha2").value;
+    if (s1 !== s2) { msg("#rdStatus", "As senhas não conferem.", "erro"); return; }
+    var tok = (location.hash.match(/redefinir=([^&]+)/) || [])[1]; msg("#rdStatus", "Salvando…");
+    api("POST", "/redefinir", { token: tok, senha: s1 }).then(function (j) {
+      sessao = j.token; eu = j.usuario; try { localStorage.setItem("av-sessao", sessao); } catch (e) {}
+      history.replaceState(null, "", location.pathname); modal(null, false); estadoConexao(); setStatus("Senha definida. Bem-vindo, " + eu.nome + "!", "ok");
+    }).catch(function (e) { msg("#rdStatus", e.message, "erro"); });
+  }
+  function abrirConta() { $("#ctInfo").innerHTML = "<b>" + esc(eu.nome) + "</b> · login <b>" + esc(eu.login) + "</b> · " + (eu.papel === "admin" ? "administrador" : "editor"); $("#ctEmail").value = eu.email || ""; msg("#ctStatus", ""); modal("#mConta"); }
+  function trocarSenha() {
+    msg("#ctStatus", "Trocando…");
+    api("POST", "/senha", { atual: $("#ctAtual").value, nova: $("#ctNova").value }).then(function (j) { sessao = j.token; try { localStorage.setItem("av-sessao", sessao); } catch (e) {} $("#ctAtual").value = ""; $("#ctNova").value = ""; msg("#ctStatus", "Senha trocada.", "ok"); }).catch(function (e) { msg("#ctStatus", e.message, "erro"); });
+  }
+  function salvarEmail() {
+    msg("#ctStatus", "Salvando…");
+    api("POST", "/email", { email: $("#ctEmail").value, senha: $("#ctSenhaEmail").value }).then(function (j) { eu = j.usuario; $("#ctSenhaEmail").value = ""; msg("#ctStatus", "E-mail de recuperação salvo.", "ok"); }).catch(function (e) { msg("#ctStatus", e.message, "erro"); });
+  }
+  function listarUsuarios() {
+    $("#usLista").innerHTML = "Carregando…";
+    api("GET", "/usuarios").then(function (j) {
+      $("#usLista").innerHTML = j.usuarios.map(function (u) {
+        return '<div style="display:flex;gap:10px;align-items:center;padding:8px 0;border-bottom:1px solid var(--line);font-size:13px;flex-wrap:wrap"><b>' + esc(u.nome) + '</b> <span style="color:var(--muted)">' + esc(u.login) + ' · ' + esc(u.email || "sem e-mail") + ' · ' + (u.papel === "admin" ? "administrador" : "editor") + (u.senhaDefinida ? "" : ' · <span style="color:var(--erro)">senha ainda não definida</span>') + '</span><span style="margin-left:auto;display:flex;gap:6px"><button class="btn" type="button" data-reenviar="' + esc(u.login) + '">Reenviar link de senha</button>' + (u.login !== eu.login ? '<button class="btn" type="button" data-excluir="' + esc(u.login) + '">Excluir</button>' : "") + '</span></div>';
+      }).join("") || "Nenhum usuário.";
+    }).catch(function (e) { $("#usLista").textContent = e.message; });
+  }
+  function criarUsuario() {
+    msg("#usStatus", "Criando…");
+    api("POST", "/usuarios", { nome: $("#usNome").value, login: $("#usLogin").value, email: $("#usEmail").value, papel: $("#usPapel").value }).then(function (j) {
+      msg("#usStatus", j.emailEnviado ? "Usuário criado. O link para definir a senha foi enviado para " + j.usuario.email + "." : "Usuário criado, mas o e-mail não foi enviado (" + (j.motivo || "") + "). Link para definir a senha (vale 72 h): " + j.link, j.emailEnviado ? "ok" : "erro");
+      $("#usNome").value = ""; $("#usLogin").value = ""; $("#usEmail").value = ""; listarUsuarios();
+    }).catch(function (e) { msg("#usStatus", e.message, "erro"); });
+  }
+  $("#usLista").addEventListener("click", function (e) {
+    var b = e.target.closest("button"); if (!b) return;
+    if (b.dataset.reenviar) { msg("#usStatus", "Enviando…"); api("POST", "/usuarios/" + b.dataset.reenviar, {}).then(function (j) { msg("#usStatus", j.emailEnviado ? "Link enviado para o e-mail do usuário." : "E-mail não enviado (" + (j.motivo || "") + "). Link (vale 72 h): " + j.link, j.emailEnviado ? "ok" : "erro"); }).catch(function (er) { msg("#usStatus", er.message, "erro"); }); }
+    if (b.dataset.excluir) { if (b.dataset.confirma !== "1") { b.dataset.confirma = "1"; b.textContent = "Confirmar"; return; } api("DELETE", "/usuarios/" + b.dataset.excluir).then(listarUsuarios).catch(function (er) { msg("#usStatus", er.message, "erro"); }); }
+  });
   function copiarMd() {
     var p = ler(); if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
     var txt = arquivoMd(p), ok = function () { setStatus("Arquivo copiado (" + p.slug + ".md). Cole para a Nexus ou no repositório.", "ok"); };
@@ -323,11 +424,29 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
   $("#btnPublicar").addEventListener("click", publicar);
   $("#btnExcluir").addEventListener("click", excluir);
   $("#btnBaixar").addEventListener("click", copiarMd);
-  $("#btnConfig").addEventListener("click", function () { $("#cfgRepo").value = cfg.repo; $("#cfgBranch").value = cfg.branch; $("#cfgToken").value = ""; $("#modal").classList.add("aberto"); });
-  $("#cfgFechar").addEventListener("click", function () { $("#modal").classList.remove("aberto"); });
-  $("#cfgSalvar").addEventListener("click", function () { cfg.repo = $("#cfgRepo").value.trim() || cfg.repo; cfg.branch = $("#cfgBranch").value.trim() || "main"; var t = $("#cfgToken").value.trim(); if (t) cfg.token = t; try { localStorage.setItem("av-admin", JSON.stringify(cfg)); } catch (e) {} $("#cfgToken").value = ""; $("#modal").classList.remove("aberto"); estadoConexao(); });
-  $("#cfgLimpar").addEventListener("click", function () { delete cfg.token; try { localStorage.setItem("av-admin", JSON.stringify(cfg)); } catch (e) {} $("#modal").classList.remove("aberto"); estadoConexao(); });
+  $("#fLogin").addEventListener("submit", entrar);
+  $("#lgEsqueci").addEventListener("click", function () { $("#rcLogin").value = $("#lgLogin").value; msg("#rcStatus", ""); modal("#mRecuperar"); });
+  $("#rcEnviar").addEventListener("click", recuperar);
+  $("#rcVoltar").addEventListener("click", function () { modal("#mLogin"); });
+  $("#fRedefinir").addEventListener("submit", redefinir);
+  $("#btnSair").addEventListener("click", function () { sair(false); });
+  $("#btnConta").addEventListener("click", abrirConta);
+  $("#ctTrocar").addEventListener("click", trocarSenha);
+  $("#ctEmailSalvar").addEventListener("click", salvarEmail);
+  $("#ctFechar").addEventListener("click", function () { modal(null, false); });
+  $("#btnUsuarios").addEventListener("click", function () { msg("#usStatus", ""); listarUsuarios(); modal("#mUsuarios"); });
+  $("#usCriar").addEventListener("click", criarUsuario);
+  $("#usFechar").addEventListener("click", function () { modal(null, false); });
 
+  /* sessão: link de redefinição > sessão guardada > tela de login (na prévia o painel abre só para escrever) */
+  var tokRedef = (location.hash.match(/redefinir=([^&]+)/) || [])[1];
+  if (tokRedef) {
+    api("GET", "/redefinir?token=" + encodeURIComponent(tokRedef)).then(function (j) { $("#rdTitulo").textContent = (j.novo ? "Definir senha" : "Redefinir senha") + " · " + j.nome; $("#rdTexto").textContent = "Login: " + j.login + ". Escolha uma senha com pelo menos 8 caracteres, misturando letras e números."; modal("#mRedefinir"); })
+      .catch(function (e) { msg("#lgStatus", e.message, "erro"); modal("#mLogin"); });
+  } else if (sessao && !naPrevia) {
+    api("GET", "/eu").then(function (j) { eu = j.usuario; modal(null, false); estadoConexao(); }).catch(function () { sair(true); });
+  } else if (naPrevia) { modal(null, false); }
+  else { modal("#mLogin"); }
   estadoConexao();
   fetch("posts.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) { posts = j; listar(); if (posts.length) document.querySelector("#itens .item").click(); else novo(); }).catch(function () { novo(); });
 })();
