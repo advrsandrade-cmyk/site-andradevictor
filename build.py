@@ -8,7 +8,7 @@ Proposta Nexus Digital Group (19/10/2026). Conteúdo levantado nas publicações
 de validação com o cliente. Publicidade dentro do Provimento 205/2021 da OAB: informativa, sem promessa
 de resultado, sem preços, sem depoimentos de clientes.
 """
-import pathlib, shutil, sys, html, json
+import pathlib, shutil, sys, html, json, re
 from urllib.parse import quote
 
 RAIZ = pathlib.Path(__file__).parent
@@ -133,6 +133,7 @@ MENU = [
     ("areas", "Áreas de Atuação"),  # abre submenu
     ("socios", "Sócios"),
     ("escritorio", "O Escritório"),
+    ("blog", "Blog"),
     ("contato", "Contato"),
 ]
 SUBMENU = [(a[0], a[2]) for a in AREAS]
@@ -141,7 +142,7 @@ SUBMENU = [(a[0], a[2]) for a in AREAS]
 def url(slug):
     if slug == "index":
         return "/" if LIMPO else "index.html"
-    return f"/{slug}/" if LIMPO else f"{slug}.html"
+    return f"/{slug}/" if LIMPO else f"{slug.replace('/', '-')}.html"
 
 
 def wa(texto=None, socio=None):
@@ -281,7 +282,7 @@ def rodape():
       </div>
       <div class="rodape-nav-mobile">
         <h4>Navegação</h4>
-        <ul><li><a href="{url("index")}">Início</a></li><li><a href="{url("socios")}">Sócios</a></li><li><a href="{url("escritorio")}">O escritório</a></li><li><a href="{url("contato")}">Contato</a></li><li><a href="{url("privacidade")}">Privacidade</a></li></ul>
+        <ul><li><a href="{url("index")}">Início</a></li><li><a href="{url("socios")}">Sócios</a></li><li><a href="{url("escritorio")}">O escritório</a></li><li><a href="{url("blog")}">Blog</a></li><li><a href="{url("contato")}">Contato</a></li><li><a href="{url("privacidade")}">Privacidade</a></li></ul>
       </div>
       <div>
         <h4>Escritório</h4>
@@ -342,6 +343,21 @@ def schema(slug, titulo, descricao):
         "sameAs": [INSTAGRAM],
     }
     grafos = [org]
+    if slug.startswith("blog/"):
+        post = POSTS_POR_SLUG[slug[5:]]
+        aut = SOCIOS[post["autor"]]
+        grafos.append({"@context": "https://schema.org", "@type": "BlogPosting", "@id": canonica(slug) + "#post", "headline": post["titulo"], "description": post["descricao"],
+                       "datePublished": post["data"], "dateModified": post.get("atualizado", post["data"]), "inLanguage": "pt-BR", "url": canonica(slug), "mainEntityOfPage": canonica(slug),
+                       "keywords": post["palavras"], "articleSection": AREA[post["area"]][2], "wordCount": post["palavras_n"], "image": (f"{SITE}/assets/img/blog/{post['slug']}.jpg" if post.get("capa") else f"{SITE}/assets/img/og.jpg"),
+                       "author": {"@type": "Person", "name": aut["nome"], "jobTitle": "Advogado", "url": SITE + "/socios/#" + post["autor"]},
+                       "publisher": {"@type": "Organization", "name": NOME, "logo": {"@type": "ImageObject", "url": f"{SITE}/assets/img/logo-av.png"}}})
+        grafos.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
+            {"@type": "ListItem", "position": 1, "name": "Início", "item": SITE + "/"},
+            {"@type": "ListItem", "position": 2, "name": "Blog", "item": canonica("blog")},
+            {"@type": "ListItem", "position": 3, "name": post["titulo"], "item": canonica(slug)}]})
+        if post["faq"]:
+            grafos.append({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": r}} for q, r in post["faq"]]})
+        return "\n".join(f'<script type="application/ld+json">{json.dumps(g, ensure_ascii=False)}</script>' for g in grafos)
     if slug != "index":
         nome_pag = AREA[slug][2] if slug in AREA else dict(MENU).get(slug, titulo.split(" · ")[0])
         grafos.append({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [
@@ -389,13 +405,13 @@ def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
 <meta property="og:description" content="{html.escape(descricao)}">
 <meta property="og:image" content="{SITE}/{og}?v=2">
 <meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
+<meta property="og:image:height" content="{"675" if "/blog/" in og else "630"}">
 <meta property="og:image:alt" content="{NOME} — atendimento online para todo o Brasil">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{html.escape(titulo)}">
 <meta name="twitter:description" content="{html.escape(descricao)}">
 <meta name="twitter:image" content="{SITE}/{og}?v=2">
-<meta property="og:type" content="website">
+<meta property="og:type" content="{"article" if slug.startswith("blog/") else "website"}">
 <meta name="theme-color" content="#0B0B0C">
 <link rel="icon" href="assets/img/icone-av-64.png" type="image/png" sizes="64x64">
 <link rel="icon" href="assets/img/icone-av-256.png" type="image/png" sizes="256x256">
@@ -631,6 +647,8 @@ def home():
 
 {passos()}
 
+{blog_secao_home()}
+
 <section class="secao secao-clara"><div class="wrap">
   {secao_titulo("Em números", "Experiência que se traduz em segurança", centro=True)}
   {numeros()}
@@ -788,6 +806,190 @@ def contato_pg():
 '''
 
 
+# ---------------------------------------------------------------------------
+# Blog: posts em src/blog/*.md (cabeçalho "chave: valor" + linha em branco + texto em Markdown)
+# ---------------------------------------------------------------------------
+BLOG = SRC / "blog"
+MESES = ["janeiro", "fevereiro", "março", "abril", "maio", "junho", "julho", "agosto", "setembro", "outubro", "novembro", "dezembro"]
+
+
+def data_extenso(iso):
+    a, m, d = (int(x) for x in iso.split("-"))
+    return f"{d} de {MESES[m - 1]} de {a}"
+
+
+def _inline(t):
+    t = html.escape(t, quote=False)
+    t = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", t)
+    t = re.sub(r"(?<!\*)\*(?!\*)(.+?)(?<!\*)\*(?!\*)", r"<em>\1</em>", t)
+
+    def link(m):
+        txt, alvo = m.group(1), m.group(2)
+        if re.match(r"^https?://", alvo):
+            return f'<a href="{alvo}" target="_blank" rel="noopener noreferrer">{txt}</a>'
+        return f'<a href="{url(alvo)}">{txt}</a>'   # alvo = slug interno (ex.: tributario, contato)
+    return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, t)
+
+
+def md_para_html(texto):
+    """Conversor Markdown mínimo e previsível: ##/###, parágrafos, listas (- e 1.), citação (>), negrito, itálico e links."""
+    saida, par, lista, tipo = [], [], [], None
+
+    def fecha_par():
+        if par:
+            saida.append(f"<p>{_inline(' '.join(par))}</p>"); par.clear()
+
+    def fecha_lista():
+        nonlocal tipo
+        if lista:
+            saida.append(f"<{tipo}>" + "".join(f"<li>{_inline(i)}</li>" for i in lista) + f"</{tipo}>"); lista.clear(); tipo = None
+
+    for linha in texto.splitlines():
+        l = linha.rstrip()
+        if not l.strip():
+            fecha_par(); fecha_lista(); continue
+        if l.startswith("### "):
+            fecha_par(); fecha_lista(); saida.append(f"<h3>{_inline(l[4:])}</h3>")
+        elif l.startswith("## "):
+            fecha_par(); fecha_lista(); saida.append(f"<h2>{_inline(l[3:])}</h2>")
+        elif l.startswith("> "):
+            fecha_par(); fecha_lista(); saida.append(f'<blockquote class="aviso"><p>{_inline(l[2:])}</p></blockquote>')
+        elif re.match(r"^- ", l):
+            fecha_par()
+            if tipo != "ul": fecha_lista(); tipo = "ul"
+            lista.append(l[2:])
+        elif re.match(r"^\d+\. ", l):
+            fecha_par()
+            if tipo != "ol": fecha_lista(); tipo = "ol"
+            lista.append(re.sub(r"^\d+\. ", "", l))
+        else:
+            fecha_lista(); par.append(l.strip())
+    fecha_par(); fecha_lista()
+    return "\n".join(saida)
+
+
+def ler_posts():
+    posts = []
+    for arq in sorted(BLOG.glob("*.md")):
+        txt = arq.read_text(encoding="utf-8")
+        cab, _, corpo = txt.partition("\n\n")
+        meta, faq, chave = {}, [], None
+        for l in cab.splitlines():
+            if l.startswith("- ") and chave == "faq":
+                q, _, r = l[2:].partition(" | "); faq.append((q.strip(), r.strip()))
+            elif ":" in l:
+                k, _, v = l.partition(":"); chave = k.strip(); meta[chave] = v.strip()
+        corpo = corpo.strip()
+        n = len(re.findall(r"\w+", corpo))
+        p = dict(meta)
+        p.update(slug=arq.stem, corpo_md=corpo, corpo=md_para_html(corpo), faq=faq, palavras_n=n, leitura=max(1, round(n / 200)),
+                 rascunho=meta.get("status", "publicado").lower() == "rascunho")
+        p.setdefault("seo_titulo", p["titulo"]); p.setdefault("resumo", p["descricao"]); p.setdefault("palavras", ""); p.setdefault("autor", AREA[p["area"]][4])
+        posts.append(p)
+    posts.sort(key=lambda p: p["data"], reverse=True)
+    return posts
+
+
+POSTS = ler_posts() if BLOG.exists() else []
+POSTS_PUB = [p for p in POSTS if not p["rascunho"]]
+POSTS_POR_SLUG = {p["slug"]: p for p in POSTS}
+
+
+def card_post(p, destaque=False):
+    a = AREA[p["area"]]
+    s = SOCIOS[p["autor"]]
+    return f'''<article class="post-card revela{" destaque" if destaque else ""}">
+  {f'<a class="post-capa post-capa-foto" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><img src="assets/img/blog/{p["slug"]}-card.jpg" srcset="assets/img/blog/{p["slug"]}-card.jpg 1x, assets/img/blog/{p["slug"]}-card@2x.jpg 2x" alt="" width="640" height="360" loading="lazy" decoding="async"></a>' if p.get("capa") else f'<a class="post-capa post-capa-{p["area"]}" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><span class="icone">{I[a[1]]}</span><span class="post-capa-area">{a[3]}</span></a>'}
+  <div class="post-corpo">
+    <p class="post-meta"><a class="tag" href="{url(a[0])}">{a[2]}</a><time datetime="{p["data"]}">{data_extenso(p["data"])}</time><span>{p["leitura"]} min de leitura</span></p>
+    <h3><a href="{url("blog/" + p["slug"])}">{p["titulo"]}</a></h3>
+    <p class="post-resumo">{p["resumo"]}</p>
+    <p class="post-autor"><img src="assets/img/socio-{p["autor"]}-q.jpg" srcset="assets/img/socio-{p["autor"]}-q.jpg 1x, assets/img/socio-{p["autor"]}-q@2x.jpg 2x" alt="" width="450" height="450" loading="lazy" decoding="async"><span>Por <b>{s["tratamento"]}</b></span><a class="post-ler" href="{url("blog/" + p["slug"])}">Ler {I["arrow"]}</a></p>
+  </div>
+</article>'''
+
+
+def blog_pg():
+    cards = "".join(card_post(p) for p in POSTS_PUB)
+    return f'''
+<section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
+  <span class="eyebrow">Blog</span>
+  <h1 class="hero-titulo">Direito explicado de forma clara</h1>
+  <p class="hero-lead">Artigos dos sócios sobre situações do dia a dia: o que diz a lei, quais são os prazos e como agir. Conteúdo informativo, para você chegar à consulta sabendo o que perguntar.</p>
+</div></div></section>
+
+<section class="secao secao-clara secao-blog"><div class="wrap">
+  <div class="posts">{cards}</div>
+</div></section>
+
+{cta("Ficou com dúvida sobre o seu caso?", "Os artigos explicam a regra geral; a consulta analisa a sua situação. Atendimento online para todo o Brasil, por videochamada e WhatsApp.")}
+'''
+
+
+def post_pg(p):
+    a = AREA[p["area"]]
+    s = SOCIOS[p["autor"]]
+    relacionados = [q for q in POSTS_PUB if q["slug"] != p["slug"]][:3]
+    faq_html = (f'''<section class="post-faq"><h2>Perguntas frequentes</h2>{faq(p["faq"])}</section>''' if p["faq"] else "")
+    msg = f"Olá, {s['tratamento']}! Li o artigo \"{p['titulo']}\" no site e gostaria de uma orientação."
+    return f'''
+<article class="post">
+<section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy post-cab">
+  <nav class="migalhas" aria-label="Você está em"><a href="{url("index")}">Início</a> {I["chev"]} <a href="{url("blog")}">Blog</a> {I["chev"]} <span>{a[2]}</span></nav>
+  <span class="eyebrow">{a[2]}</span>
+  <h1 class="hero-titulo">{p["titulo"]}</h1>
+  <p class="hero-lead">{p["descricao"]}</p>
+  <p class="post-meta post-meta-hero"><img src="assets/img/socio-{p["autor"]}-q.jpg" srcset="assets/img/socio-{p["autor"]}-q.jpg 1x, assets/img/socio-{p["autor"]}-q@2x.jpg 2x" alt="" width="450" height="450" decoding="async"><span>Por <b>{s["tratamento"]}</b> · {s["oab"]}</span><time datetime="{p["data"]}">{data_extenso(p["data"])}</time><span>{p["leitura"]} min de leitura</span></p>
+</div></div></section>
+
+{f'''<figure class="post-capa-grande"><div class="wrap"><img src="assets/img/blog/{p["slug"]}.jpg" srcset="assets/img/blog/{p["slug"]}.jpg 1x, assets/img/blog/{p["slug"]}@2x.jpg 2x" alt="{html.escape(p.get("capa_alt", p["titulo"]))}" width="1200" height="675" fetchpriority="high" decoding="async">{f'<figcaption>{p["capa_credito"]}</figcaption>' if p.get("capa_credito") else ""}</div></figure>''' if p.get("capa") else ""}
+
+<section class="secao secao-clara"><div class="wrap post-grade">
+  <div class="post-texto texto-longo">
+    {p["corpo"]}
+    {faq_html}
+    <div class="post-compartilhar"><span>Compartilhar:</span><a href="https://wa.me/?text={quote(p["titulo"] + " — " + canonica("blog/" + p["slug"]))}" target="_blank" rel="noopener noreferrer">{I["whats"]}<span>WhatsApp</span></a><a href="https://www.linkedin.com/sharing/share-offsite/?url={quote(canonica("blog/" + p["slug"]))}" target="_blank" rel="noopener noreferrer">LinkedIn</a></div>
+  </div>
+  <aside class="post-lateral">
+    <div class="post-autor-box revela">
+      <div class="moldura">{foto(f"socio-{p["autor"]}-q", s["tratamento"] + ", advogado", sizes="(max-width: 960px) 100vw, 25vw")}</div>
+      <span class="eyebrow">Quem escreveu</span>
+      <h3>{s["tratamento"]}</h3>
+      <p>{s["foco"]} · {s["oab"]}</p>
+      {btn_whats(f"Falar com {s['nome'].split()[0]}", "btn btn-dourado", msg, p["autor"])}
+      <a class="btn btn-contorno" href="{url("socios")}#{p["autor"]}">Perfil completo {I["arrow"]}</a>
+    </div>
+    <div class="lateral-area revela"><span class="eyebrow">Área relacionada</span><h3><a href="{url(a[0])}">{a[2]}</a></h3><p>{a[5]}</p><a class="btn btn-contorno" href="{url(a[0])}">Saiba mais {I["arrow"]}</a></div>
+  </aside>
+</div></section>
+
+<section class="secao secao-escura secao-blog"><div class="wrap">
+  <div class="areas-cab">{secao_titulo("Continue lendo", "Outros artigos do escritório")}<a class="btn btn-contorno" href="{url("blog")}">Ver todos {I["arrow"]}</a></div>
+  <div class="posts posts-trilho" data-trilho>{"".join(card_post(q) for q in relacionados)}</div>
+  <div class="ver-todos"><a class="btn btn-contorno" href="{url("blog")}">Ver todos os artigos {I["arrow"]}</a></div>
+</div></section>
+
+{cta("Fale com um advogado", "O artigo explica a regra geral; a consulta analisa a sua situação. Atendimento online para todo o Brasil, por videochamada e WhatsApp.", socio=p["autor"], msg=msg)}
+</article>
+'''
+
+
+def blog_secao_home():
+    if not POSTS_PUB:
+        return ""
+    cards = "".join(card_post(p) for p in POSTS_PUB[:6])
+    return f'''
+<section class="secao secao-clara secao-blog" id="blog">
+  <div class="wrap">
+    <div class="areas-cab">{secao_titulo("Blog", "Direito explicado de forma clara", "Artigos dos sócios sobre prazos, direitos e situações do dia a dia.")}<a class="btn btn-contorno-escuro" href="{url("blog")}">Todos os artigos {I["arrow"]}</a></div>
+    <div class="posts posts-trilho" data-trilho>{cards}</div>
+    {trilho_nav()}
+    <div class="ver-todos"><a class="btn btn-contorno-escuro" href="{url("blog")}">Ver todos os artigos {I["arrow"]}</a></div>
+  </div>
+</section>
+'''
+
+
 def privacidade_pg():
     return f'''
 <section class="pagina-hero pagina-hero-curta"><div class="wrap"><div class="hero-copy">
@@ -840,14 +1042,18 @@ SEO_AREAS = {  # título e descrição de busca de cada área (atendimento onlin
 for a in AREAS:
     t, d = SEO_AREAS.get(a[0], (f"{a[2]} · Andrade e Victor Advogados", a[5]))
     PAGINAS[a[0]] = (t, d, (lambda a=a: area_pg(a)))
+PAGINAS["blog"] = ("Blog · Direito explicado de forma clara | Andrade e Victor Advogados", "Artigos dos advogados Ricardo Andrade e Jefferson Victor sobre Direito Tributário, Previdenciário, Penal, Administrativo e Civil: prazos, direitos e como agir.", blog_pg)
+for p in POSTS_PUB:
+    PAGINAS["blog/" + p["slug"]] = (p["seo_titulo"] + " | Andrade e Victor", p["descricao"], (lambda p=p: post_pg(p)), (f"assets/img/blog/{p['slug']}.jpg" if p.get("capa") else None))
 
 
 def main():
     if DIST.exists():
         shutil.rmtree(DIST)
     shutil.copytree(SRC / "assets", DIST / "assets")
-    for slug, (titulo, desc, fn) in PAGINAS.items():
-        out = pagina(slug, titulo, desc, fn())
+    for slug, item in PAGINAS.items():
+        titulo, desc, fn = item[:3]
+        out = pagina(slug, titulo, desc, fn(), *([item[3]] if len(item) > 3 and item[3] else []))
         if LIMPO:  # páginas em /slug/ precisam de caminhos absolutos para os assets
             import re
             out = re.sub(r'((?:src|href|srcset)=")assets/', r'\1/assets/', out)
@@ -856,7 +1062,11 @@ def main():
             (DIST / slug).mkdir(parents=True, exist_ok=True)
             (DIST / slug / "index.html").write_text(out, encoding="utf-8")
         else:
-            (DIST / f"{slug}.html").write_text(out, encoding="utf-8")
+            (DIST / f"{slug.replace('/', '-')}.html").write_text(out, encoding="utf-8")
+    # Painel de postagens (/admin/) e índice dos posts que ele lê
+    if (SRC / "admin").exists():
+        shutil.copytree(SRC / "admin", DIST / "admin")
+        (DIST / "admin" / "posts.json").write_text(json.dumps([{k: p.get(k, "") for k in ("slug", "titulo", "seo_titulo", "descricao", "area", "autor", "data", "palavras", "resumo", "leitura", "rascunho", "capa", "capa_alt", "capa_credito")} | {"faq": p["faq"], "md": p["corpo_md"]} for p in POSTS], ensure_ascii=False, indent=1), encoding="utf-8")
     (DIST / "_redirects").write_text("/index.html / 301\n", encoding="utf-8")
     (DIST / "google54d106e30fb959fe.html").write_text("google-site-verification: google54d106e30fb959fe.html", encoding="utf-8")  # Search Console (arquivo)
     (DIST / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")  # IndexNow
@@ -864,11 +1074,11 @@ def main():
     import datetime
     hoje = datetime.date.today().isoformat()
     prioridade = {"index": "1.0", "areas": "0.9", "contato": "0.8", "socios": "0.8", "escritorio": "0.7", "privacidade": "0.3"}
-    urls = [(canonica(s), prioridade.get(s, "0.9")) for s in PAGINAS if s != "404"]
+    urls = [(canonica(s), prioridade.get(s, "0.7" if s.startswith("blog/") else "0.9"), (POSTS_POR_SLUG[s[5:]]["data"] if s.startswith("blog/") else hoje)) for s in PAGINAS if s != "404"]
     (DIST / "sitemap.xml").write_text('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
-                                      + "".join(f"  <url><loc>{u}</loc><lastmod>{hoje}</lastmod><changefreq>monthly</changefreq><priority>{p}</priority></url>\n" for u, p in urls)
+                                      + "".join(f"  <url><loc>{u}</loc><lastmod>{d}</lastmod><changefreq>{'weekly' if u.endswith('/blog/') else 'monthly'}</changefreq><priority>{p}</priority></url>\n" for u, p, d in urls)
                                       + "</urlset>\n", encoding="utf-8")
-    (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /404.html\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
+    (DIST / "robots.txt").write_text(f"User-agent: *\nAllow: /\nDisallow: /404.html\nDisallow: /admin/\n\nSitemap: {SITE}/sitemap.xml\n", encoding="utf-8")
     print(f"ok → {DIST} ({len(PAGINAS)} páginas, links {'limpos' if LIMPO else '.html'}, sitemap com {len(urls)} URLs)")
 
 

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Painel do blog · Andrade e Victor</title>
+<link rel="icon" href="../assets/img/icone-av-64.png" type="image/png">
+<style>
+@font-face { font-family: "Cormorant Garamond"; font-weight: 600; font-display: swap; src: url(../assets/fonts/cormorant-garamond-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 400; font-display: swap; src: url(../assets/fonts/manrope-latin-400-normal.woff2) format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 600; font-display: swap; src: url(../assets/fonts/manrope-latin-600-normal.woff2) format("woff2"); }
+@font-face { font-family: "Manrope"; font-weight: 700; font-display: swap; src: url(../assets/fonts/manrope-latin-700-normal.woff2) format("woff2"); }
+:root { --bg: #f4f2ee; --card: #fff; --fg: #1a1a1c; --muted: #6b6a66; --line: #e2ded6; --ouro: #b8964f; --ouro-2: #d9bd7a; --preto: #0b0b0c; --grafite: #1c1c1f; --ok: #2f8f5b; --erro: #b3362b; --chip: #f7f3ea;
+  --serif: "Cormorant Garamond", Georgia, serif; --sans: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--sans); }
+.topo { background: var(--preto); color: #fff; display: flex; align-items: center; gap: 14px; padding: 10px 20px; border-bottom: 1px solid #2a2a2e; flex-wrap: wrap; }
+.topo .marca { font-family: var(--serif); font-size: 20px; font-weight: 600; }
+.topo .marca b { color: var(--ouro-2); font-weight: 600; }
+.topo .url { font-size: 12px; color: #9c9a93; }
+.topo .dir { margin-left: auto; display: flex; gap: 10px; align-items: center; font-size: 12px; color: #d8d5cc; }
+.topo .st { display: inline-flex; align-items: center; gap: 6px; }
+.topo .st i { width: 8px; height: 8px; border-radius: 50%; background: #777; display: inline-block; }
+.topo .st.on i { background: var(--ok); }
+.app { display: grid; grid-template-columns: 260px minmax(0, 1fr) minmax(0, 1fr); min-height: calc(100vh - 56px); }
+.lista { background: var(--grafite); color: #d8d5cc; padding: 16px 0; border-right: 1px solid #2a2a2e; display: flex; flex-direction: column; }
+.lista h4 { margin: 0 20px 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #8d8b84; }
+.lista .novo { margin: 0 16px 12px; }
+.lista button.item { display: block; width: 100%; text-align: left; background: none; border: 0; border-left: 3px solid transparent; color: #d8d5cc; padding: 10px 17px; cursor: pointer; font: inherit; }
+.lista button.item:hover { background: #26262a; }
+.lista button.item.ativo { border-left-color: var(--ouro-2); background: #232327; color: #fff; }
+.lista button.item small { display: block; color: #8d8b84; font-size: 11px; margin-top: 2px; }
+.lista button.item .rasc { color: var(--ouro-2); }
+.lista .config { margin-top: auto; padding: 14px 20px 0; border-top: 1px solid #2a2a2e; }
+.form { padding: 20px 24px 40px; min-width: 0; border-right: 1px solid var(--line); overflow: auto; }
+.cab { display: flex; align-items: flex-end; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+.cab h1 { font-family: var(--serif); font-size: 28px; font-weight: 600; margin: 0; line-height: 1.1; }
+.cab p { margin: 2px 0 0; color: var(--muted); font-size: 13px; }
+.btn { font: inherit; font-weight: 600; border: 1px solid var(--line); background: var(--card); color: var(--fg); padding: 9px 14px; border-radius: 6px; cursor: pointer; }
+.btn:hover { border-color: var(--ouro); }
+.btn.ouro { background: linear-gradient(135deg, var(--ouro), var(--ouro-2)); color: #1a1305; border-color: transparent; }
+.btn.esc { background: var(--grafite); color: #fff; border-color: #2a2a2e; }
+.btn:disabled { opacity: .5; cursor: default; }
+.btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid var(--ouro); outline-offset: 2px; }
+.campo { display: flex; flex-direction: column; gap: 5px; margin-bottom: 14px; min-width: 0; }
+.campo label { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); display: flex; justify-content: space-between; }
+.campo label .cont { font-weight: 600; text-transform: none; letter-spacing: 0; }
+.campo label .cont.ruim { color: var(--erro); }
+.campo input, .campo textarea, .campo select { font: inherit; color: var(--fg); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; width: 100%; }
+.campo textarea { resize: vertical; min-height: 70px; }
+.campo textarea.md { min-height: 420px; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 13px; line-height: 1.55; }
+.campo small { color: var(--muted); font-size: 12px; }
+.duas { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.tres { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.faq .par { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; margin-bottom: 8px; }
+.faq .par button { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 6px; width: 36px; cursor: pointer; }
+.add { align-self: flex-start; border: 1px dashed var(--ouro); background: transparent; color: var(--ouro); padding: 6px 12px; border-radius: 6px; cursor: pointer; font: inherit; font-weight: 600; }
+.acoes { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 18px; position: sticky; bottom: 0; background: var(--bg); padding: 12px 0; border-top: 1px solid var(--line); }
+.status { font-size: 13px; color: var(--muted); }
+.status.ok { color: var(--ok); font-weight: 600; }
+.status.erro { color: var(--erro); font-weight: 600; }
+.previa { background: #0b0b0c; color: #f1efe9; padding: 20px 24px 40px; min-width: 0; overflow: auto; }
+.previa .tag { font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #9c9a93; margin-bottom: 12px; display: flex; justify-content: space-between; align-items: center; }
+.seo { background: #141416; border: 1px solid #26262a; border-radius: 8px; padding: 14px 16px; margin-bottom: 18px; }
+.seo h4 { margin: 0 0 8px; font-size: 11px; letter-spacing: .14em; text-transform: uppercase; color: #9c9a93; }
+.seo ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 6px 14px; font-size: 12px; }
+.seo li { display: flex; gap: 8px; align-items: flex-start; color: #c9c6bd; }
+.seo li::before { content: "•"; color: #777; }
+.seo li.ok::before { content: "✓"; color: #5fc08a; }
+.seo li.ruim::before { content: "!"; color: #e0a24a; font-weight: 700; }
+.google { background: #fff; color: #1a0dab; border-radius: 8px; padding: 12px 16px; margin-bottom: 18px; font-family: Arial, sans-serif; }
+.google .u { color: #202124; font-size: 12px; }
+.google .t { font-size: 18px; margin: 2px 0; line-height: 1.3; }
+.google .d { color: #4d5156; font-size: 13px; }
+.artigo { max-width: 680px; }
+.artigo .eyebrow { color: var(--ouro-2); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; font-weight: 700; }
+.artigo h1 { font-family: var(--serif); font-size: 36px; line-height: 1.1; margin: 8px 0 10px; font-weight: 600; }
+.artigo .lead { color: #c9c6bd; font-size: 16px; margin: 0 0 18px; }
+.artigo .meta { color: #9c9a93; font-size: 12px; margin-bottom: 22px; }
+.artigo .corpo { color: #e6e3da; font-size: 15px; line-height: 1.7; }
+.artigo .corpo h2 { font-family: var(--serif); font-size: 26px; margin: 1.6em 0 .4em; font-weight: 600; }
+.artigo .corpo h3 { font-family: var(--serif); font-size: 20px; margin: 1.3em 0 .3em; font-weight: 600; }
+.artigo .corpo p { margin: 0 0 1em; }
+.artigo .corpo ul { list-style: disc; padding-left: 1.3em; }
+.artigo .corpo ol { list-style: decimal; padding-left: 1.3em; }
+.artigo .corpo li::marker { color: var(--ouro-2); }
+.artigo .corpo a { color: var(--ouro-2); }
+.artigo .corpo blockquote { margin: 1.6em 0 0; padding: 12px 16px; border-left: 3px solid var(--ouro); background: #17160f; color: #c9c6bd; font-size: 13px; }
+.artigo .faqp h2 { font-family: var(--serif); font-size: 26px; margin: 1.6em 0 .4em; }
+.artigo .faqp details { border-top: 1px solid #2a2a2e; padding: 10px 0; }
+.artigo .faqp summary { cursor: pointer; font-weight: 600; }
+.artigo .faqp p { color: #c9c6bd; margin: 8px 0 0; }
+.modal { position: fixed; inset: 0; background: rgba(0, 0, 0, .55); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 20; }
+.modal.aberto { display: flex; }
+.modal .caixa { background: var(--card); color: var(--fg); border-radius: 10px; padding: 22px; width: min(100%, 520px); max-height: 90vh; overflow: auto; }
+.modal h2 { font-family: var(--serif); margin: 0 0 6px; font-weight: 600; }
+.modal p { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+.modal .acoes { position: static; border: 0; padding: 0; }
+.aviso { background: #fff7e6; border: 1px solid #f0d9a6; color: #6b4f0e; padding: 10px 12px; border-radius: 6px; font-size: 13px; margin-bottom: 14px; }
+@media (max-width: 1100px) { .app { grid-template-columns: 230px minmax(0, 1fr); } .previa { grid-column: 1 / -1; } .seo ul { grid-template-columns: 1fr; } }
+@media (max-width: 720px) { .app { grid-template-columns: 1fr; min-height: 0; } .lista { border-right: 0; } .lista .config { margin-top: 8px; } .duas, .tres { grid-template-columns: 1fr; } .faq .par { grid-template-columns: 1fr; } .form { padding: 16px; border-right: 0; } .previa { padding: 16px; } }
+</style>
+</head>
+<body>
+<header class="topo">
+  <span class="marca">Andrade <b>&amp;</b> Victor</span>
+  <span class="url">Painel do blog</span>
+  <span class="dir"><span class="st" id="stConexao"><i></i> Sem conexão com o site</span><button class="btn esc" type="button" id="btnConfig">Configurar</button></span>
+</header>
+
+<div class="app">
+  <nav class="lista" aria-label="Artigos">
+    <h4>Artigos</h4>
+    <button class="btn ouro novo" type="button" id="btnNovo">+ Novo artigo</button>
+    <div id="itens"></div>
+    <div class="config"><small style="color:#8d8b84">Os artigos são lidos do site publicado. Para publicar ou editar, configure a conexão com o GitHub (botão "Configurar").</small></div>
+  </nav>
+
+  <main class="form">
+    <div class="cab"><div><h1 id="tituloForm">Novo artigo</h1><p>Preencha, confira a prévia e o checklist de SEO ao lado e publique.</p></div></div>
+    <div class="aviso" id="avisoPrevia" hidden>Você está na prévia do site. Aqui dá para escrever e conferir; a publicação só funciona no painel do site no ar.</div>
+
+    <div class="campo"><label for="titulo">Título do artigo <span class="cont" id="cTitulo"></span></label><input id="titulo" placeholder="Ex.: INSS negou o benefício: como recorrer"><small>Curto e direto: até 45 caracteres cabe em duas linhas no celular.</small></div>
+    <div class="duas">
+      <div class="campo"><label for="slug">Endereço (slug)</label><input id="slug" placeholder="inss-negou-o-beneficio"><small>andradevictoradvogados.com.br/blog/<b id="slugPrev">…</b>/</small></div>
+      <div class="campo"><label for="data">Data</label><input id="data" type="date"></div>
+    </div>
+    <div class="tres">
+      <div class="campo"><label for="area">Área</label><select id="area"><option value="tributario">Direito Tributário</option><option value="previdenciario">Direito Previdenciário</option><option value="penal">Direito Penal</option><option value="administrativo">Direito Administrativo</option><option value="civil">Direito Civil</option></select></div>
+      <div class="campo"><label for="autor">Autor</label><select id="autor"><option value="ricardo">Dr. Ricardo Andrade</option><option value="jefferson">Dr. Jefferson Victor</option></select></div>
+      <div class="campo"><label for="status">Situação</label><select id="situacao"><option value="publicado">Publicado no site</option><option value="rascunho">Rascunho (fora do ar)</option></select></div>
+    </div>
+    <div class="campo"><label for="seo_titulo">Título para o Google <span class="cont" id="cSeo"></span></label><input id="seo_titulo" placeholder="Versão mais completa do título, com a palavra-chave (até 60 caracteres)"></div>
+    <div class="campo"><label for="descricao">Descrição para o Google <span class="cont" id="cDesc"></span></label><textarea id="descricao" placeholder="Resumo de 1 a 2 frases que aparece nos resultados de busca (até 155 caracteres)."></textarea></div>
+    <div class="campo"><label for="palavras">Palavras-chave</label><input id="palavras" placeholder="separadas por vírgula"><small>A primeira é a principal: deve aparecer no título e no primeiro parágrafo.</small></div>
+    <div class="campo"><label for="resumo">Resumo do card</label><textarea id="resumo" placeholder="Duas frases para a lista de artigos."></textarea></div>
+    <div class="campo"><label for="md">Texto do artigo</label><textarea id="md" class="md" placeholder="## Subtítulo&#10;&#10;Parágrafo com **negrito** e [link para a área](tributario).&#10;&#10;- item de lista&#10;1. item numerado&#10;&#10;> Aviso final"></textarea><small>Formatação: <b>## Subtítulo</b>, <b>### Sub-subtítulo</b>, <b>**negrito**</b>, <b>- lista</b>, <b>1. lista numerada</b>, <b>[texto](tributario)</b> para link interno (tributario, previdenciario, penal, administrativo, civil, contato, socios) e <b>&gt; texto</b> para o aviso final.</small></div>
+    <div class="campo faq"><label>Perguntas frequentes (vão para o Google como FAQ)</label><div id="faq"></div><button class="add" type="button" id="addFaq">+ Adicionar pergunta</button></div>
+
+    <div class="acoes">
+      <button class="btn ouro" type="button" id="btnPublicar">Publicar no site</button>
+      <button class="btn" type="button" id="btnBaixar">Copiar arquivo .md</button>
+      <button class="btn" type="button" id="btnExcluir" hidden>Excluir artigo</button>
+      <span class="status" id="status"></span>
+    </div>
+  </main>
+
+  <aside class="previa" aria-label="Prévia">
+    <div class="tag"><span>Prévia do artigo</span><span id="leitura"></span></div>
+    <div class="seo"><h4>Checklist de SEO</h4><ul id="checklist"></ul></div>
+    <div class="google"><div class="u" id="gUrl">andradevictoradvogados.com.br › blog › …</div><div class="t" id="gTitulo">Título para o Google</div><div class="d" id="gDesc">Descrição para o Google</div></div>
+    <article class="artigo">
+      <span class="eyebrow" id="pArea">Direito Tributário</span>
+      <h1 id="pTitulo">Título do artigo</h1>
+      <p class="lead" id="pDesc"></p>
+      <p class="meta" id="pMeta"></p>
+      <div class="corpo" id="pCorpo"></div>
+      <div class="faqp" id="pFaq"></div>
+    </article>
+  </aside>
+</div>
+
+<div class="modal" id="modal"><div class="caixa">
+  <h2>Conexão com o site</h2>
+  <p>O painel grava os artigos direto no repositório do site (GitHub). Cole aqui um token de acesso com permissão de escrita no repositório. Ele fica salvo só neste navegador.</p>
+  <div class="campo"><label for="cfgRepo">Repositório</label><input id="cfgRepo" placeholder="usuario/repositorio"></div>
+  <div class="campo"><label for="cfgBranch">Branch</label><input id="cfgBranch" placeholder="main"></div>
+  <div class="campo"><label for="cfgToken">Token de acesso (GitHub)</label><input id="cfgToken" type="password" autocomplete="off" placeholder="cole o token aqui"><small>Crie em GitHub → Settings → Developer settings → Fine-grained tokens, só para este repositório, com "Contents: Read and write".</small></div>
+  <div class="acoes"><button class="btn ouro" type="button" id="cfgSalvar">Salvar</button><button class="btn" type="button" id="cfgFechar">Cancelar</button><button class="btn" type="button" id="cfgLimpar">Esquecer token</button></div>
+</div></div>
+
+<script>
+(function () {
+  var $ = function (s) { return document.querySelector(s); };
+  var AREAS = { tributario: ["Direito Tributário", "ricardo"], previdenciario: ["Direito Previdenciário", "jefferson"], penal: ["Direito Penal", "jefferson"], administrativo: ["Direito Administrativo", "ricardo"], civil: ["Direito Civil", "ricardo"] };
+  var AUTORES = { ricardo: "Dr. Ricardo Andrade", jefferson: "Dr. Jefferson Victor" };
+  var LINKS = { tributario: 1, previdenciario: 1, penal: 1, administrativo: 1, civil: 1, contato: 1, socios: 1, areas: 1, escritorio: 1, blog: 1 };
+  var posts = [], atual = null, cfg = {};
+  var naPrevia = location.hostname.indexOf("claudeusercontent") >= 0 || location.hostname.indexOf("claude.ai") >= 0;
+  if (naPrevia) $("#avisoPrevia").hidden = false;
+  try { cfg = JSON.parse(localStorage.getItem("av-admin") || "{}"); } catch (e) { cfg = {}; }
+  if (!cfg.repo) cfg.repo = "advrsandrade-cmyk/site-andradevictor";
+  if (!cfg.branch) cfg.branch = "main";
+  function conectado() { return !!cfg.token && !naPrevia; }
+  function estadoConexao() { var el = $("#stConexao"); el.className = "st" + (conectado() ? " on" : ""); el.innerHTML = "<i></i> " + (conectado() ? "Conectado ao site" : "Sem conexão com o site"); }
+
+  /* ---------- Markdown → HTML (mesmas regras do build.py) ---------- */
+  function esc(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function inline(t) {
+    t = esc(t).replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>").replace(/(^|[^*])\*(?!\*)(.+?)\*(?!\*)/g, "$1<em>$2</em>");
+    return t.replace(/\[([^\]]+)\]\(([^)]+)\)/g, function (m, txt, alvo) { return /^https?:/.test(alvo) ? '<a href="' + alvo + '" target="_blank" rel="noopener">' + txt + "</a>" : '<a href="../' + alvo + '/">' + txt + "</a>"; });
+  }
+  function md2html(src) {
+    var out = [], par = [], lista = [], tipo = null;
+    function fp() { if (par.length) { out.push("<p>" + inline(par.join(" ")) + "</p>"); par = []; } }
+    function fl() { if (lista.length) { out.push("<" + tipo + ">" + lista.map(function (i) { return "<li>" + inline(i) + "</li>"; }).join("") + "</" + tipo + ">"); lista = []; tipo = null; } }
+    src.split("\n").forEach(function (l) {
+      l = l.replace(/\s+$/, "");
+      if (!l.trim()) { fp(); fl(); return; }
+      if (l.indexOf("### ") === 0) { fp(); fl(); out.push("<h3>" + inline(l.slice(4)) + "</h3>"); }
+      else if (l.indexOf("## ") === 0) { fp(); fl(); out.push("<h2>" + inline(l.slice(3)) + "</h2>"); }
+      else if (l.indexOf("> ") === 0) { fp(); fl(); out.push("<blockquote><p>" + inline(l.slice(2)) + "</p></blockquote>"); }
+      else if (/^- /.test(l)) { fp(); if (tipo !== "ul") { fl(); tipo = "ul"; } lista.push(l.slice(2)); }
+      else if (/^\d+\. /.test(l)) { fp(); if (tipo !== "ol") { fl(); tipo = "ol"; } lista.push(l.replace(/^\d+\. /, "")); }
+      else { fl(); par.push(l.trim()); }
+    });
+    fp(); fl();
+    return out.join("\n");
+  }
+
+  /* ---------- Formulário ---------- */
+  var campos = ["titulo", "slug", "data", "area", "autor", "situacao", "seo_titulo", "descricao", "palavras", "resumo", "md"];
+  function slugify(t) { return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 70); }
+  function lerFaq() { return [].slice.call(document.querySelectorAll("#faq .par")).map(function (p) { var i = p.querySelectorAll("input"); return [i[0].value.trim(), i[1].value.trim()]; }).filter(function (x) { return x[0] && x[1]; }); }
+  function addFaq(q, r) { var d = document.createElement("div"); d.className = "par"; d.innerHTML = '<input placeholder="Pergunta" value=""><input placeholder="Resposta curta" value=""><button type="button" title="Remover">×</button>'; var i = d.querySelectorAll("input"); i[0].value = q || ""; i[1].value = r || ""; d.querySelector("button").addEventListener("click", function () { d.remove(); render(); }); $("#faq").appendChild(d); }
+  function ler() { var p = {}; campos.forEach(function (c) { p[c] = $("#" + c).value.trim(); }); p.faq = lerFaq(); return p; }
+  function preencher(p) {
+    campos.forEach(function (c) { $("#" + c).value = p[c] || ""; });
+    $("#status").className = "status"; $("#status").textContent = "";
+    $("#faq").innerHTML = ""; (p.faq || []).forEach(function (f) { addFaq(f[0], f[1]); });
+    $("#tituloForm").textContent = p.slug ? "Editar artigo" : "Novo artigo";
+    $("#btnExcluir").hidden = !p.slug || !posts.some(function (x) { return x.slug === p.slug; });
+    render();
+  }
+  function novo() { atual = null; var hoje = new Date().toISOString().slice(0, 10); preencher({ data: hoje, area: "tributario", autor: "ricardo", situacao: "publicado" }); $("#titulo").focus(); marcarAtivo(null); }
+  function marcarAtivo(slug) { document.querySelectorAll("#itens .item").forEach(function (b) { b.classList.toggle("ativo", b.dataset.slug === slug); }); }
+  function listar() {
+    var el = $("#itens"); el.innerHTML = "";
+    posts.forEach(function (p) {
+      var b = document.createElement("button"); b.type = "button"; b.className = "item"; b.dataset.slug = p.slug;
+      b.innerHTML = esc(p.titulo) + "<small>" + (p.rascunho ? '<span class="rasc">Rascunho</span> · ' : "") + p.data + " · " + (AREAS[p.area] ? AREAS[p.area][0] : p.area) + "</small>";
+      b.addEventListener("click", function () { atual = p; preencher({ titulo: p.titulo, slug: p.slug, data: p.data, area: p.area, autor: p.autor, situacao: p.rascunho ? "rascunho" : "publicado", seo_titulo: p.seo_titulo, descricao: p.descricao, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq }); marcarAtivo(p.slug); window.scrollTo(0, 0); });
+      el.appendChild(b);
+    });
+  }
+
+  /* ---------- Prévia e checklist ---------- */
+  function contador(id, n, max) { var el = $(id); el.textContent = n + "/" + max; el.className = "cont" + (n > max ? " ruim" : ""); }
+  function render() {
+    var p = ler();
+    contador("#cTitulo", p.titulo.length, 45); contador("#cSeo", p.seo_titulo.length, 60); contador("#cDesc", p.descricao.length, 155);
+    $("#slugPrev").textContent = p.slug || "…";
+    $("#gUrl").textContent = "andradevictoradvogados.com.br › blog › " + (p.slug || "…");
+    $("#gTitulo").textContent = (p.seo_titulo || p.titulo || "Título para o Google") + " | Andrade e Victor";
+    $("#gDesc").textContent = p.descricao || "Descrição para o Google";
+    $("#pArea").textContent = AREAS[p.area] ? AREAS[p.area][0] : ""; $("#pTitulo").textContent = p.titulo || "Título do artigo"; $("#pDesc").textContent = p.descricao;
+    var palavras = (p.md.match(/\w+/g) || []).length, min = Math.max(1, Math.round(palavras / 200));
+    $("#pMeta").textContent = "Por " + AUTORES[p.autor] + " · " + (p.data ? p.data.split("-").reverse().join("/") : "") + " · " + min + " min de leitura";
+    $("#leitura").textContent = palavras + " palavras · " + min + " min";
+    $("#pCorpo").innerHTML = md2html(p.md);
+    $("#pFaq").innerHTML = p.faq.length ? "<h2>Perguntas frequentes</h2>" + p.faq.map(function (f) { return "<details><summary>" + esc(f[0]) + "</summary><p>" + esc(f[1]) + "</p></details>"; }).join("") : "";
+    var chave = (p.palavras.split(",")[0] || "").trim().toLowerCase(), primeiro = (p.md.split("\n\n")[0] || "").toLowerCase();
+    var h2 = (p.md.match(/^## /gm) || []).length, links = Object.keys(LINKS).some(function (k) { return p.md.indexOf("](" + k + ")") >= 0; });
+    var itens = [
+      ["Título com até 45 caracteres (2 linhas no celular)", p.titulo.length > 0 && p.titulo.length <= 45],
+      ["Título para o Google entre 40 e 60 caracteres", p.seo_titulo.length >= 40 && p.seo_titulo.length <= 60],
+      ["Descrição entre 120 e 155 caracteres", p.descricao.length >= 120 && p.descricao.length <= 155],
+      ["Palavra-chave principal definida", !!chave],
+      ["Palavra-chave no título do Google", !!chave && (p.seo_titulo + p.titulo).toLowerCase().indexOf(chave.split(" ")[0].slice(0, 6)) >= 0],
+      ["Palavra-chave no primeiro parágrafo", !!chave && primeiro.indexOf(chave.split(" ")[0].slice(0, 6)) >= 0],
+      ["Pelo menos 3 subtítulos (##)", h2 >= 3],
+      ["Mínimo de 600 palavras", palavras >= 600],
+      ["Link interno para uma área ou contato", links],
+      ["Pelo menos 2 perguntas frequentes", p.faq.length >= 2],
+      ["Aviso final (> texto)", /^> /m.test(p.md)],
+      ["Resumo do card preenchido", p.resumo.length > 40]
+    ];
+    $("#checklist").innerHTML = itens.map(function (i) { return '<li class="' + (i[1] ? "ok" : "ruim") + '">' + i[0] + "</li>"; }).join("");
+  }
+  function arquivoMd(p) {
+    var linhas = ["titulo: " + p.titulo, "seo_titulo: " + p.seo_titulo, "descricao: " + p.descricao, "area: " + p.area, "autor: " + p.autor, "data: " + p.data, "palavras: " + p.palavras, "resumo: " + p.resumo];
+    if (p.situacao === "rascunho") linhas.push("status: rascunho");
+    if (p.faq.length) { linhas.push("faq:"); p.faq.forEach(function (f) { linhas.push("- " + f[0] + " | " + f[1]); }); }
+    return linhas.join("\n") + "\n\n" + p.md.trim() + "\n";
+  }
+
+  /* ---------- GitHub ---------- */
+  function gh(caminho, opts) {
+    opts = opts || {}; opts.headers = { Authorization: "Bearer " + cfg.token, Accept: "application/vnd.github+json", "Content-Type": "application/json" };
+    return fetch("https://api.github.com/repos/" + cfg.repo + "/contents/" + caminho + (opts.method === "GET" || !opts.method ? "?ref=" + cfg.branch : ""), opts).then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.message || r.status); return j; }); });
+  }
+  function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+  function setStatus(txt, cls) { var el = $("#status"); el.className = "status" + (cls ? " " + cls : ""); el.textContent = txt; }
+  function publicar() {
+    var p = ler();
+    if (!p.titulo || !p.md) { setStatus("Preencha o título e o texto.", "erro"); return; }
+    if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
+    if (!conectado()) { $("#modal").classList.add("aberto"); if (naPrevia) setStatus("Na prévia a publicação não funciona; abra o painel no site publicado.", "erro"); return; }
+    var caminho = "src/blog/" + p.slug + ".md", b = $("#btnPublicar"); b.disabled = true; setStatus("Enviando para o site…");
+    gh(caminho, { method: "GET" }).then(function (j) { return j.sha; }, function () { return null; }).then(function (sha) {
+      var body = { message: (sha ? "Atualiza" : "Novo") + " artigo: " + p.titulo, content: b64(arquivoMd(p)), branch: cfg.branch }; if (sha) body.sha = sha;
+      return gh(caminho, { method: "PUT", body: JSON.stringify(body) });
+    }).then(function () {
+      setStatus("Enviado. O site é regerado e publicado em 1 a 3 minutos.", "ok"); b.disabled = false;
+      var i = posts.findIndex(function (x) { return x.slug === p.slug; }); var reg = { slug: p.slug, titulo: p.titulo, seo_titulo: p.seo_titulo, descricao: p.descricao, area: p.area, autor: p.autor, data: p.data, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq, rascunho: p.situacao === "rascunho" };
+      if (i >= 0) posts[i] = reg; else posts.unshift(reg); posts.sort(function (a, c) { return a.data < c.data ? 1 : -1; }); listar(); marcarAtivo(p.slug); $("#btnExcluir").hidden = false;
+    }).catch(function (e) { setStatus("Não foi possível publicar: " + e.message, "erro"); b.disabled = false; });
+  }
+  function excluir() {
+    var p = ler(); if (!p.slug) return;
+    if (!conectado()) { $("#modal").classList.add("aberto"); return; }
+    var b = $("#btnExcluir"); if (b.dataset.confirma !== "1") { b.dataset.confirma = "1"; b.textContent = "Confirmar exclusão"; setStatus("Clique de novo para excluir de vez.", "erro"); return; }
+    var caminho = "src/blog/" + p.slug + ".md"; b.disabled = true; setStatus("Excluindo…");
+    gh(caminho, { method: "GET" }).then(function (j) { return gh(caminho, { method: "DELETE", body: JSON.stringify({ message: "Exclui artigo: " + p.titulo, sha: j.sha, branch: cfg.branch }) }); })
+      .then(function () { posts = posts.filter(function (x) { return x.slug !== p.slug; }); listar(); novo(); setStatus("Artigo excluído. O site é republicado em 1 a 3 minutos.", "ok"); b.disabled = false; b.dataset.confirma = ""; b.textContent = "Excluir artigo"; })
+      .catch(function (e) { setStatus("Não foi possível excluir: " + e.message, "erro"); b.disabled = false; b.dataset.confirma = ""; b.textContent = "Excluir artigo"; });
+  }
+  function copiarMd() {
+    var p = ler(); if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
+    var txt = arquivoMd(p), ok = function () { setStatus("Arquivo copiado (" + p.slug + ".md). Cole para a Nexus ou no repositório.", "ok"); };
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(ok, function () { setStatus("Selecione e copie o texto do artigo manualmente.", "erro"); }); else ok();
+  }
+
+  /* ---------- Eventos ---------- */
+  document.addEventListener("input", function (e) {
+    if (e.target.id === "titulo" && !atual) { $("#slug").value = slugify(e.target.value); }
+    if (e.target.id === "area") { $("#autor").value = AREAS[e.target.value][1]; }
+    if (e.target.closest(".form")) render();
+  });
+  $("#btnNovo").addEventListener("click", novo);
+  $("#addFaq").addEventListener("click", function () { addFaq("", ""); });
+  $("#btnPublicar").addEventListener("click", publicar);
+  $("#btnExcluir").addEventListener("click", excluir);
+  $("#btnBaixar").addEventListener("click", copiarMd);
+  $("#btnConfig").addEventListener("click", function () { $("#cfgRepo").value = cfg.repo; $("#cfgBranch").value = cfg.branch; $("#cfgToken").value = ""; $("#modal").classList.add("aberto"); });
+  $("#cfgFechar").addEventListener("click", function () { $("#modal").classList.remove("aberto"); });
+  $("#cfgSalvar").addEventListener("click", function () { cfg.repo = $("#cfgRepo").value.trim() || cfg.repo; cfg.branch = $("#cfgBranch").value.trim() || "main"; var t = $("#cfgToken").value.trim(); if (t) cfg.token = t; try { localStorage.setItem("av-admin", JSON.stringify(cfg)); } catch (e) {} $("#cfgToken").value = ""; $("#modal").classList.remove("aberto"); estadoConexao(); });
+  $("#cfgLimpar").addEventListener("click", function () { delete cfg.token; try { localStorage.setItem("av-admin", JSON.stringify(cfg)); } catch (e) {} $("#modal").classList.remove("aberto"); estadoConexao(); });
+
+  estadoConexao();
+  fetch("posts.json", { cache: "no-store" }).then(function (r) { return r.json(); }).then(function (j) { posts = j; listar(); if (posts.length) document.querySelector("#itens .item").click(); else novo(); }).catch(function () { novo(); });
+})();
+</script>
+</body>
+</html>

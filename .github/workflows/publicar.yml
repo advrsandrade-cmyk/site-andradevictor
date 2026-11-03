@@ -1,0 +1,30 @@
+# Regera o site (docs/) sempre que o conteúdo ou o gerador mudam — inclusive quando o painel do blog grava um artigo.
+name: Publicar site
+on:
+  push:
+    branches: [main]
+    paths: ["src/**", "build.py"]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency: publicar
+jobs:
+  publicar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - name: Gerar o site
+        run: |
+          python3 build.py --limpo
+          rm -rf docs && cp -r dist docs
+          echo andradevictoradvogados.com.br > docs/CNAME
+          touch docs/.nojekyll
+      - name: Publicar
+        run: |
+          git config user.name "Painel do site"
+          git config user.email "painel@andradevictoradvogados.com.br"
+          git add docs
+          git diff --cached --quiet || git commit -m "Publica site (automático)"
+          git push
