@@ -371,6 +371,9 @@ def schema(slug, titulo, descricao):
 
 
 INDEXNOW_KEY = "1590f818c4af16e2bf718cde7ffb1124"  # chave IndexNow (Bing, Yandex, Naver…): o arquivo /<chave>.txt prova a propriedade do site
+# Google Analytics 4 (conta "Andrade e Victor Advogados" no login da Nexus). A tag só carrega depois que o visitante aceita os cookies de medição.
+GA_ID = "G-BXSBYPT2V1"
+
 VERIFICACAO = {  # tokens de verificação dos motores de busca (Google Search Console / Bing Webmaster)
     "google-site-verification": "voJmETPGiMVQqbX5KZfRUAvctrc4y5CIDCkihBugoog",
     "msvalidate.01": "",
@@ -419,6 +422,7 @@ def pagina(slug, titulo, descricao, corpo, og="assets/img/og.jpg"):
 <link rel="preload" href="assets/fonts/cormorant-garamond-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="assets/fonts/manrope-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="assets/css/site.css?v={css_v}">
+<meta name="ga-id" content="{GA_ID}">
 {schema(slug, titulo, descricao)}
 </head>
 <body>
@@ -1006,8 +1010,9 @@ def privacidade_pg():
   <p>As informações compartilhadas com o escritório são protegidas pelo sigilo profissional do advogado, nos termos do Estatuto da Advocacia e do Código de Ética e Disciplina da OAB.</p>
   <h2>Seus direitos</h2>
   <p>Nos termos da LGPD (Lei 13.709/2018), você pode solicitar acesso, correção ou exclusão dos seus dados pelo WhatsApp de qualquer um dos sócios.</p>
-  <h2>Cookies</h2>
-  <p>Este site não usa cookies de rastreamento nem ferramentas de publicidade.</p>
+  <h2>Cookies e medição de audiência</h2>
+  <p>Com a sua autorização, o site usa o Google Analytics para medir, de forma estatística, quantas pessoas visitam as páginas e como chegam até elas — por exemplo, quais artigos são mais lidos e quantos contatos começam pelo site. Esses cookies só são ativados se você clicar em "Aceitar" no aviso de cookies; se recusar, nada é medido. O site não usa cookies de publicidade.</p>
+  <p>Você pode mudar a sua escolha a qualquer momento: <button type="button" class="link-cookies" data-cookies-abrir>abrir as preferências de cookies</button>.</p>
 </div></section>
 '''
 
