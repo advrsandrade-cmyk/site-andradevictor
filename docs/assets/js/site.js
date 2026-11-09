@@ -150,6 +150,61 @@
     new IntersectionObserver(function (en) { flut.classList.toggle("oculto", en[0].isIntersecting); }, { threshold: 0.4 }).observe(heroBtn);
   }
 
+  /* Google Analytics com consentimento (LGPD): a tag só carrega depois de "Aceitar".
+     A escolha fica neste navegador; dá para mudar pela página de Privacidade. */
+  var gaMeta = document.querySelector('meta[name="ga-id"]');
+  var GA = gaMeta && gaMeta.content, CHAVE = "av-cookies";
+  function lerEscolha() { try { return localStorage.getItem(CHAVE); } catch (e) { return null; } }
+  function salvarEscolha(v) { try { localStorage.setItem(CHAVE, v); } catch (e) {} }
+  function carregarGA() {
+    if (!GA || window.__avGA) return;
+    window.__avGA = true;
+    window.dataLayer = window.dataLayer || [];
+    window.gtag = function () { window.dataLayer.push(arguments); };
+    window.gtag("js", new Date());
+    window.gtag("config", GA, { anonymize_ip: true });
+    var s = document.createElement("script");
+    s.async = true; s.src = "https://www.googletagmanager.com/gtag/js?id=" + GA;
+    document.head.appendChild(s);
+  }
+  function evento(nome, dados) { if (window.__avGA && window.gtag) window.gtag("event", nome, dados || {}); }
+  var aviso = null;
+  function mostrarAviso() {
+    if (!GA) return;
+    if (!aviso) {
+      aviso = document.createElement("div");
+      aviso.className = "aviso-cookies";
+      aviso.setAttribute("role", "dialog");
+      aviso.setAttribute("aria-label", "Aviso de cookies");
+      aviso.innerHTML = '<p>Usamos cookies de medição (Google Analytics) para entender, de forma estatística, como o site é usado. Você aceita? <a href="' + (document.querySelector('a[href*="privacidade"]') || { getAttribute: function () { return "privacidade.html"; } }).getAttribute("href") + '">Saiba mais</a></p>' +
+        '<div class="aviso-cookies-acoes"><button type="button" class="btn btn-contorno" data-cookies="recusado">Recusar</button><button type="button" class="btn btn-dourado" data-cookies="aceito">Aceitar</button></div>';
+      document.body.appendChild(aviso);
+      aviso.addEventListener("click", function (e) {
+        var b = e.target.closest("[data-cookies]");
+        if (!b) return;
+        var v = b.getAttribute("data-cookies");
+        salvarEscolha(v);
+        aviso.hidden = true;
+        if (v === "aceito") carregarGA();
+        else if (window.__avGA) { location.reload(); }
+      });
+    }
+    aviso.hidden = false;
+  }
+  var escolha = lerEscolha();
+  if (escolha === "aceito") carregarGA();
+  else if (escolha !== "recusado") mostrarAviso();
+  document.querySelectorAll("[data-cookies-abrir]").forEach(function (b) { b.addEventListener("click", mostrarAviso); });
+  /* Contatos que começam pelo site: WhatsApp, telefone e e-mail viram eventos de lead no Analytics */
+  document.addEventListener("click", function (e) {
+    var a = e.target.closest && e.target.closest("a[href]");
+    if (!a) return;
+    var h = a.getAttribute("href") || "";
+    if (/wa\.me|api\.whatsapp\.com/.test(h)) evento("generate_lead", { metodo: "whatsapp", destino: (h.match(/wa\.me\/(\d+)/) || [])[1] || "", pagina: location.pathname });
+    else if (/^tel:/.test(h)) evento("generate_lead", { metodo: "telefone", destino: h.replace("tel:", ""), pagina: location.pathname });
+    else if (/^mailto:/.test(h)) evento("generate_lead", { metodo: "email", pagina: location.pathname });
+  }, true);
+
   /* Ano do rodapé */
   var ano = document.querySelector("[data-ano]");
   if (ano) ano.textContent = String(new Date().getFullYear());
