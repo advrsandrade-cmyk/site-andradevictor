@@ -56,6 +56,24 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
 .tres { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .faq .par { display: grid; grid-template-columns: 1fr 1.4fr auto; gap: 8px; margin-bottom: 8px; }
 .faq .par button { border: 1px solid var(--line); background: var(--card); color: var(--muted); border-radius: 6px; width: 36px; cursor: pointer; }
+.capa-caixa { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; align-items: start; }
+.capa-moldura { position: relative; aspect-ratio: 16 / 9; border-radius: 8px; overflow: hidden; background: var(--chip); border: 1px dashed var(--ouro); display: grid; place-items: center; }
+.capa-moldura img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.capa-moldura img[hidden] { display: none; }
+.capa-vazia { padding: 12px; text-align: center; color: var(--muted); font-size: 12px; }
+.capa-lado { display: flex; flex-direction: column; gap: 10px; }
+.capa-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+.capa-btns .btn { cursor: pointer; }
+.capa-aviso { font-size: 12px; color: var(--erro); }
+.capa-aviso:empty { display: none; }
+input[type=range] { width: 100%; accent-color: var(--ouro); }
+.foto-texto-btns { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-top: 6px; }
+.previa .corpo figure { margin: 1.2em 0; }
+.previa .corpo figure img { width: 100%; height: auto; display: block; border-radius: 6px; }
+.previa .corpo figcaption { font-size: 12px; color: var(--muted); text-align: center; margin-top: 6px; }
+.previa .capa-previa { margin: 0 0 14px; }
+.previa .capa-previa img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; border-radius: 6px; }
+@media (max-width: 720px) { .capa-caixa { grid-template-columns: 1fr; } }
 .add { align-self: flex-start; border: 1px dashed var(--ouro); background: transparent; color: var(--ouro); padding: 6px 12px; border-radius: 6px; cursor: pointer; font: inherit; font-weight: 600; }
 .acoes { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; margin-top: 18px; position: sticky; bottom: 0; background: var(--bg); padding: 12px 0; border-top: 1px solid var(--line); }
 .status { font-size: 13px; color: var(--muted); }
@@ -136,7 +154,22 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     <div class="campo"><label for="descricao">Descrição para o Google <span class="cont" id="cDesc"></span></label><textarea id="descricao" placeholder="Resumo de 1 a 2 frases que aparece nos resultados de busca (até 155 caracteres)."></textarea></div>
     <div class="campo"><label for="palavras">Palavras-chave</label><input id="palavras" placeholder="separadas por vírgula"><small>A primeira é a principal: deve aparecer no título e no primeiro parágrafo.</small></div>
     <div class="campo"><label for="resumo">Resumo do card</label><textarea id="resumo" placeholder="Duas frases para a lista de artigos."></textarea></div>
-    <div class="campo"><label for="md">Texto do artigo</label><textarea id="md" class="md" placeholder="## Subtítulo&#10;&#10;Parágrafo com **negrito** e [link para a área](tributario).&#10;&#10;- item de lista&#10;1. item numerado&#10;&#10;> Aviso final"></textarea><small>Formatação: <b>## Subtítulo</b>, <b>### Sub-subtítulo</b>, <b>**negrito**</b>, <b>- lista</b>, <b>1. lista numerada</b>, <b>[texto](tributario)</b> para link interno (tributario, previdenciario, penal, administrativo, civil, contato, socios) e <b>&gt; texto</b> para o aviso final.</small></div>
+    <div class="campo capa">
+      <label>Foto de capa <span class="cont" id="cCapa"></span></label>
+      <div class="capa-caixa">
+        <div class="capa-moldura"><img id="capaImg" alt="" hidden><span class="capa-vazia" id="capaVazia">Sem foto de capa: o card do blog mostra o ícone da área.</span></div>
+        <div class="capa-lado">
+          <div class="capa-btns"><label class="btn ouro" for="capaArquivo" id="capaEscolher">Escolher foto</label><input type="file" id="capaArquivo" accept="image/jpeg,image/png,image/webp" hidden><button class="btn" type="button" id="capaRemover" hidden>Remover foto</button></div>
+          <div class="campo" id="capaAjuste" hidden><label for="capaPos">Enquadramento</label><input type="range" id="capaPos" min="0" max="100" value="35"><small>Arraste para escolher a parte da foto que aparece. Não deixe cortar cabeças.</small></div>
+          <p class="capa-aviso" id="capaAviso"></p>
+          <div class="campo"><label for="capa_alt">Descrição da foto</label><input id="capa_alt" placeholder="Ex.: Advogado conversa com cliente sobre aposentadoria"><small>Ajuda quem usa leitor de tela e o Google Imagens.</small></div>
+          <div class="campo"><label for="capa_credito">Crédito da foto (opcional)</label><input id="capa_credito" placeholder="Ex.: Foto: Freepik"></div>
+        </div>
+      </div>
+      <small>JPG, PNG ou WEBP, de preferência na horizontal e com pelo menos 1600 px de largura. O painel recorta em 16:9 e gera os tamanhos certos sozinho.</small>
+    </div>
+    <div class="campo"><label for="md">Texto do artigo</label><textarea id="md" class="md" placeholder="## Subtítulo&#10;&#10;Parágrafo com **negrito** e [link para a área](tributario).&#10;&#10;- item de lista&#10;1. item numerado&#10;&#10;> Aviso final"></textarea><small>Formatação: <b>## Subtítulo</b>, <b>### Sub-subtítulo</b>, <b>**negrito**</b>, <b>- lista</b>, <b>1. lista numerada</b>, <b>[texto](tributario)</b> para link interno (tributario, previdenciario, penal, administrativo, civil, contato, socios) e <b>&gt; texto</b> para o aviso final.</small>
+      <div class="foto-texto-btns"><label class="add" for="fotoTextoArquivo">+ Inserir foto no texto</label><input type="file" id="fotoTextoArquivo" accept="image/jpeg,image/png,image/webp" hidden><small>A foto entra onde o cursor estiver, como <b>![legenda](foto:nome)</b>. Troque o texto "Legenda da foto" pela legenda.</small></div></div>
     <div class="campo faq"><label>Perguntas frequentes (vão para o Google como FAQ)</label><div id="faq"></div><button class="add" type="button" id="addFaq">+ Adicionar pergunta</button></div>
 
     <div class="acoes">
@@ -255,6 +288,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     src.split("\n").forEach(function (l) {
       l = l.replace(/\s+$/, "");
       if (!l.trim()) { fp(); fl(); return; }
+      var mf = l.trim().match(/^!\[([^\]]*)\]\(foto:([a-z0-9-]+)\)$/);
+      if (mf) { fp(); fl(); var srcF = fotosTexto[mf[2]] ? fotosTexto[mf[2]].x1 : "../assets/img/blog/" + mf[2] + ".jpg"; out.push('<figure><img src="' + srcF + '" alt="' + esc(mf[1]) + '">' + (mf[1].trim() ? "<figcaption>" + esc(mf[1]) + "</figcaption>" : "") + "</figure>"); return; }
       if (l.indexOf("### ") === 0) { fp(); fl(); out.push("<h3>" + inline(l.slice(4)) + "</h3>"); }
       else if (l.indexOf("## ") === 0) { fp(); fl(); out.push("<h2>" + inline(l.slice(3)) + "</h2>"); }
       else if (l.indexOf("> ") === 0) { fp(); fl(); out.push("<blockquote><p>" + inline(l.slice(2)) + "</p></blockquote>"); }
@@ -267,7 +302,99 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
   }
 
   /* ---------- Formulário ---------- */
-  var campos = ["titulo", "slug", "data", "area", "autor", "situacao", "seo_titulo", "descricao", "palavras", "resumo", "md"];
+  var campos = ["titulo", "slug", "data", "area", "autor", "situacao", "seo_titulo", "descricao", "palavras", "resumo", "md", "capa_alt", "capa_credito"];
+
+  /* ---------- Fotos (capa e fotos no texto) ---------- */
+  // capa: { existente: bool, nova: {img, w, h} | null, removida: bool, arquivos: {...dataURLs} }
+  var capa = { existente: false, nova: null, removida: false, arquivos: null };
+  var fotosTexto = {};   // nome → { x1, x2 } (fotos novas ainda não publicadas)
+  function carregarImagem(arquivo) {
+    return new Promise(function (ok, falha) {
+      if (!arquivo || !/^image\//.test(arquivo.type)) { falha(new Error("Escolha um arquivo de imagem (JPG, PNG ou WEBP).")); return; }
+      var url = URL.createObjectURL(arquivo), img = new Image();
+      img.onload = function () { ok(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); falha(new Error("Não foi possível abrir essa imagem.")); };
+      img.src = url;
+    });
+  }
+  // Recorta sem esticar: mantém a proporção pedida, cortando o que sobra (posY: 0 = topo, 100 = base).
+  function recortar(img, prop, larguraFinal, posY) {
+    var w = img.naturalWidth, h = img.naturalHeight, sx = 0, sy = 0, sw = w, sh = h;
+    if (w / h > prop) { sw = Math.round(h * prop); sx = Math.round((w - sw) / 2); }
+    else { sh = Math.round(w / prop); sy = Math.round((h - sh) * (posY / 100)); }
+    var c = document.createElement("canvas"); c.width = larguraFinal; c.height = Math.round(larguraFinal / prop);
+    var g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height);
+    g.drawImage(img, sx, sy, sw, sh, 0, 0, c.width, c.height);
+    return c.toDataURL("image/jpeg", 0.84);
+  }
+  function redimensionar(img, larguraMax) {
+    var w = img.naturalWidth, h = img.naturalHeight, f = Math.min(1, larguraMax / w);
+    var c = document.createElement("canvas"); c.width = Math.round(w * f); c.height = Math.round(h * f);
+    var g = c.getContext("2d"); g.imageSmoothingQuality = "high"; g.fillStyle = "#fff"; g.fillRect(0, 0, c.width, c.height);
+    g.drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL("image/jpeg", 0.84);
+  }
+  function gerarCapa() {
+    if (!capa.nova) return;
+    var img = capa.nova.img, pos = +$("#capaPos").value;
+    capa.arquivos = { capa2x: recortar(img, 16 / 9, 2400, pos), capa1x: recortar(img, 16 / 9, 1200, pos), card2x: recortar(img, 16 / 9, 1280, pos), card1x: recortar(img, 16 / 9, 640, pos) };
+    mostrarCapa();
+  }
+  function mostrarCapa() {
+    var p = ler(), im = $("#capaImg"), tem = !!capa.arquivos || (capa.existente && !capa.removida);
+    if (capa.arquivos) im.src = capa.arquivos.capa1x;
+    else if (tem) im.src = capa.cache || ("../assets/img/blog/" + (atual ? atual.slug : p.slug) + ".jpg");
+    im.hidden = !tem; $("#capaVazia").hidden = tem;
+    $("#capaEscolher").textContent = tem ? "Trocar foto" : "Escolher foto";
+    $("#capaRemover").hidden = !tem;
+    $("#capaAjuste").hidden = !(capa.nova && capa.nova.img.naturalWidth / capa.nova.img.naturalHeight < 16 / 9 - 0.01);
+    $("#cCapa").textContent = capa.arquivos ? "nova (publique para valer)" : (capa.removida ? "será removida ao publicar" : "");
+    render();
+  }
+  function escolherCapa(e) {
+    var arq = e.target.files && e.target.files[0]; e.target.value = ""; if (!arq) return;
+    $("#capaAviso").textContent = "";
+    carregarImagem(arq).then(function (img) {
+      capa.nova = { img: img }; capa.removida = false;
+      $("#capaPos").value = img.naturalHeight > img.naturalWidth ? 25 : 35;
+      if (img.naturalWidth < 1200) $("#capaAviso").textContent = "A foto é pequena (" + img.naturalWidth + " px de largura) e pode ficar sem nitidez. O ideal é a partir de 1600 px.";
+      if (!$("#capa_alt").value.trim()) $("#capa_alt").value = $("#titulo").value.trim();
+      gerarCapa();
+    }).catch(function (er) { $("#capaAviso").textContent = er.message; });
+  }
+  function removerCapa() { capa.nova = null; capa.arquivos = null; capa.removida = capa.existente; mostrarCapa(); }
+  function proximoNomeFoto(slug, md) {
+    var n = 1; while (md.indexOf("foto:" + slug + "-f" + n + ")") >= 0 || fotosTexto[slug + "-f" + n]) n++; return slug + "-f" + n;
+  }
+  function inserirFotoTexto(e) {
+    var arq = e.target.files && e.target.files[0]; e.target.value = ""; if (!arq) return;
+    var p = ler(); if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
+    if (!p.slug) { setStatus("Escreva o título antes de inserir fotos.", "erro"); return; }
+    carregarImagem(arq).then(function (img) {
+      var nome = proximoNomeFoto(p.slug, p.md);
+      fotosTexto[nome] = { x2: redimensionar(img, 1600), x1: redimensionar(img, 800) };
+      var ta = $("#md"), ini = ta.selectionStart || ta.value.length, fim = ta.selectionEnd || ini;
+      var trecho = "\n\n![Legenda da foto](foto:" + nome + ")\n\n";
+      ta.value = ta.value.slice(0, ini).replace(/\s*$/, "") + trecho + ta.value.slice(fim).replace(/^\s*/, "");
+      var pos = ta.value.indexOf("![Legenda da foto](foto:" + nome + ")") + 2; ta.focus(); ta.setSelectionRange(pos, pos + "Legenda da foto".length);
+      render(); setStatus("Foto inserida no texto. Troque \"Legenda da foto\" pela legenda e publique.", "ok");
+    }).catch(function (er) { setStatus(er.message, "erro"); });
+  }
+  function pacoteFotos(p) {
+    var fotos = [], apagar = [], base = "src/assets/img/blog/" + p.slug, b64 = function (d) { return d.split(",")[1]; };
+    if (capa.arquivos) {
+      fotos.push({ caminho: base + "@2x.jpg", base64: b64(capa.arquivos.capa2x) }, { caminho: base + ".jpg", base64: b64(capa.arquivos.capa1x) },
+                 { caminho: base + "-card@2x.jpg", base64: b64(capa.arquivos.card2x) }, { caminho: base + "-card.jpg", base64: b64(capa.arquivos.card1x) });
+    } else if (capa.removida) {
+      apagar.push(base + "@2x.jpg", base + ".jpg", base + "-card@2x.jpg", base + "-card.jpg");
+    }
+    Object.keys(fotosTexto).forEach(function (nome) {
+      if (p.md.indexOf("(foto:" + nome + ")") < 0 || nome.indexOf(p.slug + "-f") !== 0) return;
+      fotos.push({ caminho: "src/assets/img/blog/" + nome + "@2x.jpg", base64: b64(fotosTexto[nome].x2) }, { caminho: "src/assets/img/blog/" + nome + ".jpg", base64: b64(fotosTexto[nome].x1) });
+    });
+    return { fotos: fotos, apagar: apagar };
+  }
+  function temCapa() { return !!capa.arquivos || (capa.existente && !capa.removida); }
   function slugify(t) { return t.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 70); }
   function lerFaq() { return [].slice.call(document.querySelectorAll("#faq .par")).map(function (p) { var i = p.querySelectorAll("input"); return [i[0].value.trim(), i[1].value.trim()]; }).filter(function (x) { return x[0] && x[1]; }); }
   function addFaq(q, r) { var d = document.createElement("div"); d.className = "par"; d.innerHTML = '<input placeholder="Pergunta" value=""><input placeholder="Resposta curta" value=""><button type="button" title="Remover">×</button>'; var i = d.querySelectorAll("input"); i[0].value = q || ""; i[1].value = r || ""; d.querySelector("button").addEventListener("click", function () { d.remove(); render(); }); $("#faq").appendChild(d); }
@@ -276,6 +403,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     campos.forEach(function (c) { $("#" + c).value = p[c] || ""; });
     $("#status").className = "status"; $("#status").textContent = "";
     $("#faq").innerHTML = ""; (p.faq || []).forEach(function (f) { addFaq(f[0], f[1]); });
+    capa = { existente: !!p.capa, nova: null, removida: false, arquivos: null }; fotosTexto = {}; $("#capaAviso").textContent = ""; mostrarCapa();
     $("#tituloForm").textContent = p.slug ? "Editar artigo" : "Novo artigo";
     $("#btnExcluir").hidden = !p.slug || !posts.some(function (x) { return x.slug === p.slug; });
     render();
@@ -287,7 +415,7 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     posts.forEach(function (p) {
       var b = document.createElement("button"); b.type = "button"; b.className = "item"; b.dataset.slug = p.slug;
       b.innerHTML = esc(p.titulo) + "<small>" + (p.rascunho ? '<span class="rasc">Rascunho</span> · ' : "") + p.data + " · " + (AREAS[p.area] ? AREAS[p.area][0] : p.area) + "</small>";
-      b.addEventListener("click", function () { atual = p; preencher({ titulo: p.titulo, slug: p.slug, data: p.data, area: p.area, autor: p.autor, situacao: p.rascunho ? "rascunho" : "publicado", seo_titulo: p.seo_titulo, descricao: p.descricao, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq }); marcarAtivo(p.slug); window.scrollTo(0, 0); });
+      b.addEventListener("click", function () { atual = p; preencher({ titulo: p.titulo, slug: p.slug, data: p.data, area: p.area, autor: p.autor, situacao: p.rascunho ? "rascunho" : "publicado", seo_titulo: p.seo_titulo, descricao: p.descricao, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq, capa: !!p.capa, capa_alt: p.capa_alt, capa_credito: p.capa_credito }); marcarAtivo(p.slug); window.scrollTo(0, 0); });
       el.appendChild(b);
     });
   }
@@ -305,7 +433,8 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     var palavras = (p.md.match(/\w+/g) || []).length, min = Math.max(1, Math.round(palavras / 200));
     $("#pMeta").textContent = "Por " + AUTORES[p.autor] + " · " + (p.data ? p.data.split("-").reverse().join("/") : "") + " · " + min + " min de leitura";
     $("#leitura").textContent = palavras + " palavras · " + min + " min";
-    $("#pCorpo").innerHTML = md2html(p.md);
+    var capaSrc = capa.arquivos ? capa.arquivos.capa1x : (capa.existente && !capa.removida ? capa.cache || "../assets/img/blog/" + (atual ? atual.slug : p.slug) + ".jpg" : "");
+    $("#pCorpo").innerHTML = (capaSrc ? '<figure class="capa-previa"><img src="' + capaSrc + '" alt=""></figure>' : "") + md2html(p.md);
     $("#pFaq").innerHTML = p.faq.length ? "<h2>Perguntas frequentes</h2>" + p.faq.map(function (f) { return "<details><summary>" + esc(f[0]) + "</summary><p>" + esc(f[1]) + "</p></details>"; }).join("") : "";
     var chave = (p.palavras.split(",")[0] || "").trim().toLowerCase(), primeiro = (p.md.split("\n\n")[0] || "").toLowerCase();
     var h2 = (p.md.match(/^## /gm) || []).length, links = Object.keys(LINKS).some(function (k) { return p.md.indexOf("](" + k + ")") >= 0; });
@@ -321,13 +450,15 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
       ["Link interno para uma área ou contato", links],
       ["Pelo menos 2 perguntas frequentes", p.faq.length >= 2],
       ["Aviso final (> texto)", /^> /m.test(p.md)],
-      ["Resumo do card preenchido", p.resumo.length > 40]
+      ["Resumo do card preenchido", p.resumo.length > 40],
+      ["Foto de capa com descrição", temCapa() && p.capa_alt.length > 10]
     ];
     $("#checklist").innerHTML = itens.map(function (i) { return '<li class="' + (i[1] ? "ok" : "ruim") + '">' + i[0] + "</li>"; }).join("");
   }
   function arquivoMd(p) {
     var linhas = ["titulo: " + p.titulo, "seo_titulo: " + p.seo_titulo, "descricao: " + p.descricao, "area: " + p.area, "autor: " + p.autor, "data: " + p.data, "palavras: " + p.palavras, "resumo: " + p.resumo];
     if (p.situacao === "rascunho") linhas.push("status: rascunho");
+    if (temCapa()) { linhas.push("capa: sim"); if (p.capa_alt) linhas.push("capa_alt: " + p.capa_alt.replace(/\s+/g, " ")); if (p.capa_credito) linhas.push("capa_credito: " + p.capa_credito.replace(/\s+/g, " ")); }
     if (p.faq.length) { linhas.push("faq:"); p.faq.forEach(function (f) { linhas.push("- " + f[0] + " | " + f[1]); }); }
     return linhas.join("\n") + "\n\n" + p.md.trim() + "\n";
   }
@@ -341,9 +472,12 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     if (!p.slug) { p.slug = slugify(p.titulo); $("#slug").value = p.slug; }
     if (!exigeLogin()) return;
     var b = $("#btnPublicar"); b.disabled = true; setStatus("Enviando para o site…");
-    api("PUT", "/post", { slug: p.slug, conteudo: arquivoMd(p) }).then(function () {
+    var pacote = pacoteFotos(p), comFotos = pacote.fotos.length || pacote.apagar.length;
+    if (comFotos) setStatus("Enviando o artigo e as fotos…");
+    api("PUT", "/post", { slug: p.slug, conteudo: arquivoMd(p), fotos: pacote.fotos, apagar: pacote.apagar }).then(function () {
       setStatus("Enviado. O site é regerado e publicado em 1 a 3 minutos.", "ok"); b.disabled = false;
-      var i = posts.findIndex(function (x) { return x.slug === p.slug; }); var reg = { slug: p.slug, titulo: p.titulo, seo_titulo: p.seo_titulo, descricao: p.descricao, area: p.area, autor: p.autor, data: p.data, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq, rascunho: p.situacao === "rascunho" };
+      var enviada = capa.arquivos ? capa.arquivos.capa1x : capa.cache; capa = { existente: temCapa(), nova: null, removida: false, arquivos: null, cache: enviada }; fotosTexto = {}; mostrarCapa();
+      var i = posts.findIndex(function (x) { return x.slug === p.slug; }); var reg = { slug: p.slug, titulo: p.titulo, seo_titulo: p.seo_titulo, descricao: p.descricao, area: p.area, autor: p.autor, data: p.data, palavras: p.palavras, resumo: p.resumo, md: p.md, faq: p.faq, rascunho: p.situacao === "rascunho", capa: temCapa() ? "sim" : "", capa_alt: p.capa_alt, capa_credito: p.capa_credito };
       if (i >= 0) posts[i] = reg; else posts.unshift(reg); posts.sort(function (a, c) { return a.data < c.data ? 1 : -1; }); listar(); marcarAtivo(p.slug); $("#btnExcluir").hidden = false;
     }).catch(function (e) { if (e.status === 401) { sair(true); } setStatus("Não foi possível publicar: " + e.message, "erro"); b.disabled = false; });
   }
@@ -420,6 +554,10 @@ body { margin: 0; background: var(--bg); color: var(--fg); font: 14px/1.5 var(--
     if (e.target.closest(".form")) render();
   });
   $("#btnNovo").addEventListener("click", novo);
+  $("#capaArquivo").addEventListener("change", escolherCapa);
+  $("#capaRemover").addEventListener("click", removerCapa);
+  $("#capaPos").addEventListener("input", gerarCapa);
+  $("#fotoTextoArquivo").addEventListener("change", inserirFotoTexto);
   $("#addFaq").addEventListener("click", function () { addFaq("", ""); });
   $("#btnPublicar").addEventListener("click", publicar);
   $("#btnExcluir").addEventListener("click", excluir);
