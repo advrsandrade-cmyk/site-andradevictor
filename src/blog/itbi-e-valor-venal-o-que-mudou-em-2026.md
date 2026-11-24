@@ -6,6 +6,8 @@ autor: ricardo
 data: 2026-11-17
 palavras: ITBI, valor venal do imóvel, base de cálculo do ITBI, nova lei do ITBI, LC 227/2026, avaliação imobiliária, cobrança indevida de ITBI
 resumo: A nova legislação do ITBI estabelece critérios mais claros para definir o valor venal dos imóveis. Entenda o que mudou em 2026 e como as novas regras fortalecem os direitos dos contribuintes.
+capa: sim
+capa_alt: ITBI e valor venal: o que mudou em 2026?
 
 **Nova legislação estabelece critérios para avaliação de imóveis, amplia a transparência e fortalece o direito do contribuinte de contestar cobranças indevidas.**
 
