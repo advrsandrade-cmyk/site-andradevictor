@@ -9,7 +9,7 @@
 
 const SESSAO_HORAS = 12;
 const RESET_HORAS = 72;
-const PBKDF2_ITER = 120000;
+const PBKDF2_ITER = 100000; // limite do Cloudflare Workers: no máximo 100000 iterações
 const enc = new TextEncoder();
 
 /* ---------- utilidades ---------- */
@@ -95,6 +95,54 @@ async function gh(env, caminho, init = {}) {
 }
 const b64utf8 = (s) => btoa(unescape(encodeURIComponent(s)));
 const slugOk = (s) => /^[a-z0-9][a-z0-9-]{2,80}$/.test(s);
+
+/* ---------- fotos dos artigos ---------- */
+// Só JPEG, só dentro de src/assets/img/blog/, sempre com o nome começando pelo endereço do artigo.
+const FOTO_MAX_BYTES = 3 * 1024 * 1024;
+const FOTO_MAX_ARQUIVOS = 24;
+const fotoCaminhoOk = (caminho, slug) => {
+  const m = /^src\/assets\/img\/blog\/([a-z0-9-]+?)(-card|-f\d{1,2})?(@2x)?\.jpg$/.exec(String(caminho || ""));
+  return !!m && m[1] === slug;
+};
+function base64Bytes(b64) {
+  const limpo = String(b64 || "").replace(/^data:image\/jpeg;base64,/, "").replace(/\s+/g, "");
+  if (!/^[A-Za-z0-9+/]+=*$/.test(limpo)) return null;
+  const bin = atob(limpo);
+  if (bin.length > FOTO_MAX_BYTES) return null;
+  if (bin.charCodeAt(0) !== 0xff || bin.charCodeAt(1) !== 0xd8) return null; // assinatura JPEG
+  return limpo;
+}
+async function ghApi(env, caminho, init = {}) {
+  const r = await fetch(`https://api.github.com/repos/${env.GITHUB_REPO}/${caminho}`, {
+    ...init, headers: { authorization: "Bearer " + env.GITHUB_TOKEN, accept: "application/vnd.github+json", "content-type": "application/json", "user-agent": "painel-andradevictor", ...(init.headers || {}) },
+  });
+  const texto = await r.text();
+  let dados = null; try { dados = JSON.parse(texto); } catch {}
+  if (!r.ok) throw new Error(`GitHub ${r.status}: ${(dados && dados.message) || texto.slice(0, 160)}`);
+  return dados;
+}
+// Grava o artigo e as fotos num único commit (um só "Publica site" no GitHub).
+async function commitArtigoComFotos(env, slug, conteudoMd, fotos, apagar, mensagem) {
+  const ref = await ghApi(env, `git/ref/heads/${env.BRANCH}`);
+  const base = await ghApi(env, `git/commits/${ref.object.sha}`);
+  const arvore = [];
+  const md = await ghApi(env, "git/blobs", { method: "POST", body: JSON.stringify({ content: b64utf8(conteudoMd), encoding: "base64" }) });
+  arvore.push({ path: `src/blog/${slug}.md`, mode: "100644", type: "blob", sha: md.sha });
+  for (const f of fotos) {
+    const b = await ghApi(env, "git/blobs", { method: "POST", body: JSON.stringify({ content: f.base64, encoding: "base64" }) });
+    arvore.push({ path: f.caminho, mode: "100644", type: "blob", sha: b.sha });
+  }
+  const gravados = new Set(fotos.map((f) => f.caminho));
+  for (const caminho of apagar) {
+    if (gravados.has(caminho)) continue;
+    const existe = await gh(env, caminho);
+    if (existe.ok) arvore.push({ path: caminho, mode: "100644", type: "blob", sha: null });
+  }
+  const tree = await ghApi(env, "git/trees", { method: "POST", body: JSON.stringify({ base_tree: base.tree.sha, tree: arvore }) });
+  const commit = await ghApi(env, "git/commits", { method: "POST", body: JSON.stringify({ message: mensagem, tree: tree.sha, parents: [ref.object.sha], committer: { name: "Painel do blog", email: "painel@andradevictoradvogados.com.br" } }) });
+  await ghApi(env, `git/refs/heads/${env.BRANCH}`, { method: "PATCH", body: JSON.stringify({ sha: commit.sha }) });
+  return commit.sha;
+}
 
 /* ---------- limite de tentativas ---------- */
 async function tentativas(env, chave) { return (await env.PAINEL.get("tent:" + chave, "json")) || { n: 0 }; }
@@ -204,6 +252,25 @@ async function rotear(req, env, url) {
     if (!corpo.conteudo || String(corpo.conteudo).length > 200000) return erro("Conteúdo vazio ou grande demais.");
     const caminho = `src/blog/${slug}.md`;
     const atual = await gh(env, caminho);
+    const fotosIn = Array.isArray(corpo.fotos) ? corpo.fotos : [];
+    const apagarIn = Array.isArray(corpo.apagar) ? corpo.apagar : [];
+    if (fotosIn.length || apagarIn.length) {
+      if (fotosIn.length + apagarIn.length > FOTO_MAX_ARQUIVOS) return erro("Fotos demais num envio só.");
+      const fotos = [];
+      for (const f of fotosIn) {
+        if (!fotoCaminhoOk(f && f.caminho, slug)) return erro("Nome de foto inválido.");
+        const b64 = base64Bytes(f.base64);
+        if (!b64) return erro("Foto inválida ou grande demais (use JPG de até 3 MB).");
+        fotos.push({ caminho: f.caminho, base64: b64 });
+      }
+      for (const c of apagarIn) if (!fotoCaminhoOk(c, slug)) return erro("Nome de foto inválido.");
+      try {
+        const sha = await commitArtigoComFotos(env, slug, String(corpo.conteudo), fotos, apagarIn, `${atual.ok ? "Atualiza" : "Novo"} artigo com fotos: ${slug} (por ${eu.nome})`);
+        return json({ ok: true, novo: !atual.ok, commit: sha, fotos: fotos.length });
+      } catch (e) {
+        return erro("GitHub recusou a gravação das fotos: " + e.message, 502);
+      }
+    }
     const body = { message: `${atual.ok ? "Atualiza" : "Novo"} artigo: ${slug} (por ${eu.nome})`, content: b64utf8(String(corpo.conteudo)), branch: env.BRANCH, committer: { name: "Painel do blog", email: "painel@andradevictoradvogados.com.br" } };
     if (atual.ok && atual.dados && atual.dados.sha) body.sha = atual.dados.sha;
     const r = await gh(env, caminho, { method: "PUT", body: JSON.stringify(body) });
