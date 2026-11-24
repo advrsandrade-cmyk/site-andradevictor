@@ -835,6 +835,38 @@ def _inline(t):
     return re.sub(r"\[([^\]]+)\]\(([^)]+)\)", link, t)
 
 
+def jpeg_tamanho(caminho):
+    """Largura e altura de um JPEG lendo só o cabeçalho (sem bibliotecas extras)."""
+    try:
+        dados = caminho.read_bytes()
+    except OSError:
+        return None
+    i = 2
+    while i + 9 < len(dados):
+        if dados[i] != 0xFF:
+            i += 1; continue
+        marca = dados[i + 1]
+        if marca in (0xC0, 0xC1, 0xC2):
+            return int.from_bytes(dados[i + 7:i + 9], "big"), int.from_bytes(dados[i + 5:i + 7], "big")
+        i += 2 + int.from_bytes(dados[i + 2:i + 4], "big")
+    return None
+
+
+FOTO_TEXTO = re.compile(r"^!\[([^\]]*)\]\(foto:([a-z0-9-]+)\)$")
+
+
+def figura_texto(legenda, nome):
+    """Foto no meio do artigo: ![legenda](foto:nome) → assets/img/blog/nome.jpg (+ @2x)."""
+    arq = SRC / "assets" / "img" / "blog" / f"{nome}.jpg"
+    if not arq.exists():
+        return ""
+    tam = jpeg_tamanho(arq) or (1200, 800)
+    leg = html.escape(legenda.strip())
+    return (f'<figure class="artigo-foto"><img src="assets/img/blog/{nome}.jpg" srcset="assets/img/blog/{nome}.jpg 1x, assets/img/blog/{nome}@2x.jpg 2x" '
+            f'alt="{leg}" width="{tam[0]}" height="{tam[1]}" loading="lazy" decoding="async">'
+            + (f"<figcaption>{leg}</figcaption>" if leg else "") + "</figure>")
+
+
 def md_para_html(texto):
     """Conversor Markdown mínimo e previsível: ##/###, parágrafos, listas (- e 1.), citação (>), negrito, itálico e links."""
     saida, par, lista, tipo = [], [], [], None
@@ -852,6 +884,9 @@ def md_para_html(texto):
         l = linha.rstrip()
         if not l.strip():
             fecha_par(); fecha_lista(); continue
+        m_foto = FOTO_TEXTO.match(l.strip())
+        if m_foto:
+            fecha_par(); fecha_lista(); saida.append(figura_texto(m_foto.group(1), m_foto.group(2))); continue
         if l.startswith("### "):
             fecha_par(); fecha_lista(); saida.append(f"<h3>{_inline(l[4:])}</h3>")
         elif l.startswith("## "):
@@ -870,6 +905,15 @@ def md_para_html(texto):
             fecha_lista(); par.append(l.strip())
     fecha_par(); fecha_lista()
     return "\n".join(saida)
+
+
+def capa_estilo(p):
+    """Enquadramento da foto de capa escolhido no painel (capa_pos: 0 = topo, 100 = base)."""
+    try:
+        pos = max(0, min(100, int(str(p.get("capa_pos", "")).strip() or 50)))
+    except ValueError:
+        pos = 50
+    return "" if pos == 50 else f' style="object-position: 50% {pos}%"'
 
 
 def ler_posts():
@@ -903,7 +947,7 @@ def card_post(p, destaque=False):
     a = AREA[p["area"]]
     s = SOCIOS[p["autor"]]
     return f'''<article class="post-card revela{" destaque" if destaque else ""}">
-  {f'<a class="post-capa post-capa-foto" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><img src="assets/img/blog/{p["slug"]}-card.jpg" srcset="assets/img/blog/{p["slug"]}-card.jpg 1x, assets/img/blog/{p["slug"]}-card@2x.jpg 2x" alt="" width="640" height="360" loading="lazy" decoding="async"></a>' if p.get("capa") else f'<a class="post-capa post-capa-{p["area"]}" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><span class="icone">{I[a[1]]}</span><span class="post-capa-area">{a[3]}</span></a>'}
+  {f'<a class="post-capa post-capa-foto" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><img src="assets/img/blog/{p["slug"]}-card.jpg" srcset="assets/img/blog/{p["slug"]}-card.jpg 1x, assets/img/blog/{p["slug"]}-card@2x.jpg 2x" alt="" width="640" height="360"{capa_estilo(p)} loading="lazy" decoding="async"></a>' if p.get("capa") else f'<a class="post-capa post-capa-{p["area"]}" href="{url("blog/" + p["slug"])}" aria-hidden="true" tabindex="-1"><span class="icone">{I[a[1]]}</span><span class="post-capa-area">{a[3]}</span></a>'}
   <div class="post-corpo">
     <p class="post-meta"><a class="tag" href="{url(a[0])}">{a[2]}</a><time datetime="{p["data"]}">{data_extenso(p["data"])}</time><span>{p["leitura"]} min de leitura</span></p>
     <h3><a href="{url("blog/" + p["slug"])}">{p["titulo"]}</a></h3>
@@ -946,7 +990,7 @@ def post_pg(p):
   <p class="post-meta post-meta-hero"><img src="assets/img/socio-{p["autor"]}-q.jpg" srcset="assets/img/socio-{p["autor"]}-q.jpg 1x, assets/img/socio-{p["autor"]}-q@2x.jpg 2x" alt="" width="450" height="450" decoding="async"><span>Por <b>{s["tratamento"]}</b> · {s["oab"]}</span><time datetime="{p["data"]}">{data_extenso(p["data"])}</time><span>{p["leitura"]} min de leitura</span></p>
 </div></div></section>
 
-{f'''<figure class="post-capa-grande"><div class="wrap"><img src="assets/img/blog/{p["slug"]}.jpg" srcset="assets/img/blog/{p["slug"]}.jpg 1x, assets/img/blog/{p["slug"]}@2x.jpg 2x" alt="{html.escape(p.get("capa_alt", p["titulo"]))}" width="1200" height="675" fetchpriority="high" decoding="async">{f'<figcaption>{p["capa_credito"]}</figcaption>' if p.get("capa_credito") else ""}</div></figure>''' if p.get("capa") else ""}
+{f'''<figure class="post-capa-grande"><div class="wrap"><img src="assets/img/blog/{p["slug"]}.jpg" srcset="assets/img/blog/{p["slug"]}.jpg 1x, assets/img/blog/{p["slug"]}@2x.jpg 2x" alt="{html.escape(p.get("capa_alt") or p["titulo"])}" width="1200" height="675"{capa_estilo(p)} fetchpriority="high" decoding="async">{f'<figcaption>{p["capa_credito"]}</figcaption>' if p.get("capa_credito") else ""}</div></figure>''' if p.get("capa") else ""}
 
 <section class="secao secao-clara"><div class="wrap post-grade">
   <div class="post-texto texto-longo">
@@ -1071,7 +1115,7 @@ def main():
     # Painel de postagens (/admin/) e índice dos posts que ele lê
     if (SRC / "admin").exists():
         shutil.copytree(SRC / "admin", DIST / "admin")
-        (DIST / "admin" / "posts.json").write_text(json.dumps([{k: p.get(k, "") for k in ("slug", "titulo", "seo_titulo", "descricao", "area", "autor", "data", "palavras", "resumo", "leitura", "rascunho", "capa", "capa_alt", "capa_credito")} | {"faq": p["faq"], "md": p["corpo_md"]} for p in POSTS], ensure_ascii=False, indent=1), encoding="utf-8")
+        (DIST / "admin" / "posts.json").write_text(json.dumps([{k: p.get(k, "") for k in ("slug", "titulo", "seo_titulo", "descricao", "area", "autor", "data", "palavras", "resumo", "leitura", "rascunho", "capa", "capa_alt", "capa_credito", "capa_pos")} | {"faq": p["faq"], "md": p["corpo_md"]} for p in POSTS], ensure_ascii=False, indent=1), encoding="utf-8")
     (DIST / "_redirects").write_text("/index.html / 301\n", encoding="utf-8")
     (DIST / "google54d106e30fb959fe.html").write_text("google-site-verification: google54d106e30fb959fe.html", encoding="utf-8")  # Search Console (arquivo)
     (DIST / f"{INDEXNOW_KEY}.txt").write_text(INDEXNOW_KEY, encoding="utf-8")  # IndexNow
